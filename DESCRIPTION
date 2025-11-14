@@ -1,16 +1,14 @@
-Package: bettr
 Type: Package
-Title: What the Package Does (Title Case)
+Package: bettr
+Title: Calculate Shannon Entropy and Provide Optimisation Functions
 Version: 0.1.0
-Authors@R: c(
-    person(
-      "Jane", "Doe",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
-  )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Authors@R: 
+    person("Owen", "O'Connor", , "owen.oconnor.2024@mumail.ie", role = c("aut", "cre"))
+Description: We shall update this once we write the functions and we're
+    entirely sure.
+License: GPL (>= 3)
+BugReports: https://github.com/ThatObiGuy/bettr/issues
+Depends: 
+    R (>= 4.5.0)
 Encoding: UTF-8
 LazyData: true
