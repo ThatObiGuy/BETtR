@@ -3,8 +3,11 @@ Package: bettr
 Title: Calculate Shannon Entropy and Provide Optimisation Functions
 Version: 0.1.0
 Authors@R: 
-   c(person("Owen", "O'Connor", , "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
-     person("Sorin", "Bivol". SORIN.BIVOL.2023@mumail.ie", role = c("aut", "cre")) 
+    c(
+      person("Owen", "O'Connor", email = "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
+      person("Sorin", "Bivol", email = "sorin.bivol.2023@mumail.ie", role = c("aut", "cre")),
+      person("Sean", "O'Leary", email = "sean.oleary.2023@mumail.ie", role = c("aut", "cre"))
+    )
 Description: We shall update this once we write the functions and we're
     entirely sure.
 License: GPL (>= 3)
