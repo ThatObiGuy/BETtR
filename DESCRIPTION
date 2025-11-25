@@ -2,19 +2,19 @@ Type: Package
 Package: bettr
 Title: Calculate Shannon Entropy and Provide Optimisation Functions
 Version: 0.1.0
-Authors@R: 
-    c(
-      person("Owen", "O'Connor", email = "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
-      person("Sorin", "Bivol", email = "sorin.bivol.2023@mumail.ie", role = c("aut", "cre")),
-      person("Sean", "O'Leary", email = "sean.oleary.2023@mumail.ie", role = c("aut", "cre"))
-    )
-Description: We shall update this once we write the functions and we're
-    entirely sure.
+Authors@R: c(
+    person("Owen", "O'Connor", , "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
+    person("Sorin", "Bivol", , "sorin.bivol.2023@mumail.ie", role = c("aut", "cre")),
+    person("Sean", "O'Leary", , "sean.oleary.2023@mumail.ie", role = c("aut", "cre"))
+  )
+Description: This package will include 1 (or two) inbuilt dataset(s) on
+    202* English Premier League Odds (and 202* Wimbledon odds).  These
+    datasets will be bettr datasets.  This package will also contain a
+    function to transform data frames into bettr datasets and a generic
+    function to plot (and possible predict()) bettr data.
 License: GPL (>= 3)
 BugReports: https://github.com/ThatObiGuy/bettr/issues
 Depends: 
     R (>= 4.5.0)
 Encoding: UTF-8
 LazyData: true
-
-
