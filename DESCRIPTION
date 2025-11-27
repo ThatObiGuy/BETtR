@@ -10,13 +10,12 @@ Authors@R: c(
   )
 Description: This package will include 1 (or two) inbuilt dataset(s) on
     202* English Premier League Odds (and 202* Wimbledon odds).  These
-    datasets will be bettr datasets.  This package will also contain a
-    function to transform data frames into bettr datasets and a generic
-    function to plot (and possible predict()) bettr data.
+    datasets will be "bettr" datasets.  This package will also contain a
+    function to transform data frames into "bettr" datasets and a generic
+    function to plot (and possibly predict()) "bettr" data.
 License: GPL (>= 3)
 BugReports: https://github.com/ThatObiGuy/bettr/issues
 Depends: 
     R (>= 4.5.0)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.3
