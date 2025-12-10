@@ -49,7 +49,7 @@ class(epl_weekend_tsibble) <- c("bettr_data", class(epl_weekend_tsibble))
 
 class(epl_weekend_tsibble)
 
-saveRDS(epl_weekend_tsibble, file = "epl_weekend_tsibble.rds")
+save(epl_weekend_tsibble, file = "epl_weekend.RData")
 epl_weekend_tsibble <- readRDS("~/bettr/data/epl_weekend_tsibble.rds")
 
 

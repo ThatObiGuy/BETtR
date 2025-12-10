@@ -1,3 +1,17 @@
+#' Title
+#'
+#' @param data
+#' @param event_id
+#' @param logged_time
+#' @param home_odds
+#' @param away_odds
+#' @param draw_odds
+#' @param ...
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 make_bettr <- function(data,
                        event_id = "event_id",
                        logged_time = "logged_time",
@@ -23,6 +37,3 @@ make_bettr <- function(data,
   class(data_tibble) <- c("bettr_data", class(data_tibble))
   return(data_tibble)
 }
-x1 <- epl_weekend |> make_bettr()
-class(x1)
-
