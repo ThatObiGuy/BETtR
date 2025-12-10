@@ -7,7 +7,7 @@
 \method{plot}{bettr_data}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{"bettr_data"} - You can use the inbuilt dataset, \code{"epl_weekend"} or using your own odds data after using the \code{link{make_bettr}} function.}
+\item{x}{An object of class \code{"bettr_data"} - You can use the inbuilt dataset, \code{"football"} or using your own odds data after using the \code{link{make_bettr}} function.}
 
 \item{...}{Catches unused arguments to \code{plot} (not currently implemented).}
 }
@@ -18,8 +18,7 @@ a ggplot using geom_line to show the odds movement over time
 Plots percentage change of the odds of a (or many) opening favorite(s) change over time.
 }
 \examples{
-load(epl_weekend)
-plot(epl_weekend)
+plot(football)
 }
 \author{
 Owen F. O'Connor - <\email{owen.oconnor.2024@mumail.ie}>
