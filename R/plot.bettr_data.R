@@ -2,7 +2,7 @@
 #'
 #' Plots percentage change of the odds of a (or many) opening favorite(s) change over time.
 #'
-#' @param x An object of class \code{"bettr_data"} - You can use the inbuilt dataset, \code{"epl_weekend"} or using your own odds data after using the \code{link{make_bettr}} function.
+#' @param x An object of class \code{"bettr_data"} - You can use the inbuilt dataset, \code{"football"} or using your own odds data after using the \code{link{make_bettr}} function.
 #' @param ... Catches unused arguments to \code{plot} (not currently implemented).
 #'
 #' @returns a ggplot using geom_line to show the odds movement over time
@@ -14,8 +14,7 @@
 #' @importFrom ggplot2 "ggplot" "geom_line"
 #'
 #' @examples
-#' load(epl_weekend)
-#' plot(epl_weekend)
+#' plot(football)
 plot.bettr_data <- function(x, ...) {
   if(!inherits(x, "bettr_data")) stop("x must be of class 'bettr_data'")
   x <- dplyr::as_tibble(x) # fixing compatability with tstibble bettr_data
