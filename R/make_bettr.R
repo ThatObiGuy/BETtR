@@ -32,8 +32,10 @@ make_bettr <- function(data,
   if (any(is.na(as.POSIXct(data[[logged_time]], format = "%Y-%m-%d %H:%M:%S")))) {
     stop("input must be in the format 'YYYY-MM-DD HH:MM:SS'.")
   }
-  data_tibble <- data |>
-  as_tsibble(key = event_id, index = logged_time)
-  class(data_tibble) <- c("bettr_data", class(data_tibble))
-  return(data_tibble)
+  data %<>%
+    as_tsibble(key = event_id, index = logged_time) %>%
+    fill_gaps() %>%
+    fill(everything(), .direction = "down")
+  class(data) <- c("bettr_data", class(data))
+  return(data)
 }

@@ -1,11 +1,24 @@
 ---
-title: "my_vignette"
+title: "Getting started with BETtR"
+author: "Owen O'Connor, Sorin Bivol, Sean O'Leary, Ivan Cakic"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my_vignette}
+  %\VignetteIndexEntry{Getting started with BETtR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{=html}
+<div style="text-align: center; margin-bottom: 1em;">
+  <img src="tempLogo.png"
+       style="border: none !important;
+              box-shadow: none !important;
+              padding: 0 !important;
+              background: none !important;
+              width: 35%;" />
+</div>
+```
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -14,6 +27,84 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(library(bettr))
+```
+
+## Introduction
+
+__BETtR__ is an R package designed to work with betting market odds data, providing tools for structuring the odds data in objects, visualising how the odds evolve over time, and providing a basic prediction method for betting odds trajectories.
+
+This package is built around `bettr_data`, which extends a `tsibble` representation of event-level odds data.
+
+This vignette will provide a brief overview of the intended workflow when using __BETtR__.
+
+## Installing BETtR
+
+To install __BETtR__ you first need to install [R](https://cran.r-project.org/). Installing [RStudio](https://posit.co/) as a nice desktop environment for using R is also recommended, however if available the use of an RStudio server should also be suitable.
+
+Once in R you can type:
+
+```{r, eval=FALSE}
+install.packages('devtools')
+devtools::install_github('ThatObiGuy/BETtR')
+```
+
+at the R command prompt to install the latest development version of the package from the __BETtR__ [GitHub page](https://github.com/ThatObiGuy/BETtR).
+
+NOTE: There is no official CRAN release of this package (yet), the above is the only way to install the __BETtR__ package.
+
+Once you have run the above code, proceed with the following:
+
+```{r}
 library(bettr)
 ```
+
+this will load in all the __BETtR__ functions. 
+
+If you find bugs or wish to suggest new features please visit __BETtR__ [GitHub issues page](https://github.com/ThatObiGuy/bettr/issues).
+
+### Creating a BETtR_data object
+
+The base requirement to using this R package is the `make_bettr()` function. This function takes in a data frame containing betting odds and converts it into a `bettr_data` object.
+
+The input data must contain:
+
+* an event id
+* logged time
+* home, draw, and away odds
+
+```{r, eval=FALSE}
+bettr_obj <- make_bettr(raw_odds_data)
+```
+
+The return object inherits from `tsibble` and can be used with other methods provided by the package.
+
+### Plotting odds
+
+__BETtR__ provides a plotting method for `bettr_data` objects. Plots percentage change of the odds of a (or many) opening favorite(s) change over time.
+
+```{r, eval=FALSE}
+plot(bettr_obj)
+```
+
+Odds are scaled relavtive to their opening value so that the movement across different events can be compared on a common scale.
+
+### Predicting odds movement
+
+`BETtR` includes a simple prediction method for objects of class `bettr_data`.
+
+```{r, eval=FALSE}
+predict(bettr_obj)
+```
+
+
+### Example dataset
+
+The package will include example betting odds datasets that have already been processed into `bettr_data` objects. These datasets can be used to experiment with the package functionality once finalised.
+
+```{r, eval=FALSE}
+data(epl_weekend_data)
+plot(epl_weekend_data)
+```
+
