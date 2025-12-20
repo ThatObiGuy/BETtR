@@ -33,9 +33,7 @@ make_bettr <- function(data,
     stop("input must be in the format 'YYYY-MM-DD HH:MM:SS'.")
   }
   data %<>%
-    as_tsibble(key = event_id, index = logged_time) %>%
-    fill_gaps() %>%
-    fill(everything(), .direction = "down")
+    as_tsibble(key = event_id, index = logged_time)
   class(data) <- c("bettr_data", class(data))
   return(data)
 }
