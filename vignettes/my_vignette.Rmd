@@ -1,7 +1,6 @@
 ---
 title: "Getting started with BETtR"
 author: "Owen O'Connor, Sorin Bivol, Sean O'Leary, Ivan Cakic"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting started with BETtR}
@@ -9,15 +8,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{=html}
-<div style="text-align: center; margin-bottom: 1em;">
-  <img src="tempLogo.png"
-       style="border: none !important;
-              box-shadow: none !important;
-              padding: 0 !important;
-              background: none !important;
-              width: 35%;" />
-</div>
+```{r logo, echo=FALSE, results="asis"}
+htmltools::tags$div(
+  style = "text-align: center; margin-bottom: 1em;",
+  htmltools::tags$img(
+    src = "tempLogo.png",
+    style = "width: 35%; border: 0; box-shadow: none; padding: 0; background: none;"
+  )
+)
 ```
 
 ```{r, include = FALSE}
@@ -33,7 +31,7 @@ suppressPackageStartupMessages(library(bettr))
 
 ## Introduction
 
-__BETtR__ is an R package designed to work with betting market odds data, providing tools for structuring the odds data in objects, visualising how the odds evolve over time, and providing a basic prediction method for betting odds trajectories.
+__BETtR__ is an R package designed to work with betting market odds data, providing tools for structuring the odds data in objects, visualising how the odds evolve over time, and supporting exploratory prediction methods for betting odds trajectories.
 
 This package is built around `bettr_data`, which extends a `tsibble` representation of event-level odds data.
 
@@ -88,14 +86,22 @@ __BETtR__ provides a plotting method for `bettr_data` objects. Plots percentage 
 plot(bettr_obj)
 ```
 
-Odds are scaled relavtive to their opening value so that the movement across different events can be compared on a common scale.
+Odds are scaled relative to their opening value so that the movement across different events can be compared on a common scale.
 
 ### Predicting odds movement
 
-`BETtR` includes a simple prediction method for objects of class `bettr_data`.
+`BETtR` provides a prediction method for objects of class `bettr_data` via the S3 method `predict()`.
+
+The prediction interface applies time–series–based models to the odds trajectory of a given event, allowing users to compare different forecasting approaches. Currently implemented models include:
+
+* ARIMA models for autoregressive time-series forecasting
+* Exponential smoothing (ETS) models with optional interpolation for irregular time data
+* A Skellam–based model designed for discrete odds movements.
+
+The method automatically checks for gaps in the time index and applies interpolation where necessary.
 
 ```{r, eval=FALSE}
-predict(bettr_obj)
+predict(bettr_obj, h = 67)
 ```
 
 

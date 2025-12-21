@@ -24,5 +24,6 @@ Imports: dplyr,
   ggplot2
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    htmltools
 VignetteBuilder: knitr
