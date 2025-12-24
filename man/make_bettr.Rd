@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_bettr.R
 \name{make_bettr}
 \alias{make_bettr}
-\title{Title}
+\title{Convert a dataset to a bettr dataset ready for analysis}
 \usage{
 make_bettr(
   data,
@@ -11,12 +11,49 @@ make_bettr(
   home_odds = "home_odds",
   away_odds = "away_odds",
   draw_odds = "draw_odds",
+  make_tsibble = FALSE,
   ...
 )
 }
 \arguments{
-\item{...}{}
+\item{data}{An object containing betting data.}
+
+\item{event_id}{Name of the column containing the unique event identifier in
+\code{data}.}
+
+\item{logged_time}{Name of the column containing the logged time for
+each event in \code{data}.}
+
+\item{home_odds}{Name of the column containing home odds in \code{data}.}
+
+\item{away_odds}{Name of the column containing away odds in \code{data}.}
+
+\item{draw_odds}{Name of the column containing draw odds in \code{data}.}
+
+\item{make_tsibble}{Logical; if \code{TRUE}, convert data to a tsibble.}
+
+\item{...}{Catches unused arguments}
+}
+\value{
+returns an object of class \code{bettr_data}.
 }
 \description{
-Title
+Convert a dataset to a bettr dataset ready for analysis
+}
+\examples{
+# Example with package dataset
+data(football)
+
+x <- make_bettr(football, make_tsibble = TRUE)
+x2 <- make_bettr(football, make_tsibble = FALSE)
+class(x)
+class(x2)
+
+# Example with a generated dataset
+generatedExample <- data.frame(event_id = 1,
+logged_time = as.POSIXct("2024-01-01 12:00:00"), home_odds = 2.89,
+away_odds = 2.40, drawOdds = 3.36)
+
+x3 <- make_bettr(generatedExample, draw_odds = "drawOdds")
+class(x3)
 }

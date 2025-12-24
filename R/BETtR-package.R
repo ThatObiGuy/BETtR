@@ -2,11 +2,10 @@
 #'
 #' This function serves as the package startup. Displaying an ASCII art as well as relevant information for package purpose, version history and other helpul tips
 #'
-#' @name bettr
-#' @returns
-#' @export
-#'
-#' @examples
+#' @author Sean F. O'Leary - <\email{sean.oleary.2023@@mumail.ie}>
+#' @docType package
+#' @keywords package
+
 .onAttach <- function(libname, pkgname)
 {
 

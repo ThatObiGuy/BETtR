@@ -3,7 +3,7 @@
 \docType{data}
 \name{football}
 \alias{football}
-\title{Odds from bookkeeper Pinnacle - a series of English premier league matches taking place on the weekend starting 29/11/2025}
+\title{Odds from 10 different soccer matches}
 \format{
 A data frame with 1573 observations (10 matches with ~160 observations from each) and 9 columns. It contains the required columns of a bettr_data object with additional info about maximum bettable amount and start times.
 }
