@@ -1,21 +1,41 @@
-predict.bettr_data <- function(data, h) {
-  if(sum(has_gaps(data)$.gaps) > 0) {
-    warning("Gaps in time data will result in an interpolated ETS model.\n  Filling missing values with tsibble::fill_gaps()")
-    data2 <- fill_gaps(data)
-    arima <- arima_model(data2, h)
-    ets <- ets_model(data2, h)
-  } else{
-    arima <- arima_model(data, h)
-    ets <- ets_model(data, h)
-  }
-  skellam <- skellam_model(data, h = h, tickSize = 0.01, M = 2000)
+predict.bettr_data <- function(data, h, model = c("all", "skellam", "arima", "ets"), ...) {
+  if(!inherits(data, "bettr_data"))
+    stop("Calling predict.bettr_data on a non-bettr object")
 
-  list(
-    arima = arima,
-    ets = ets,
-    skellam = skellam
-  )
+  model <- match.arg(model)
+
+  switch (model,
+        "skellam" = {
+          skellam <- skellam_model(data = data, h = h, ...)
+          return(skellam)
+          },
+
+        "arima" = {
+          arima <- data %>% fill_gaps() %>% arima_model(h = h)
+          return(arima)
+          },
+
+        "ets" = {
+          warning("Gaps in time data will result in an interpolated ETS model.\n  Filling missing values with tsibble::fill_gaps()")
+          ets <- data %>% fill_gaps() %>% ets_model(h = h)
+          return(ets)
+          },
+
+        "all" = {
+          warning("Gaps in time data will result in an interpolated ETS model.\n  Filling missing values with tsibble::fill_gaps()")
+          skellam <- skellam_model(data = data, h = h, ...)
+          data %<>% fill_gaps()
+          arima <- arima_model(data = data, h = h)
+          ets <- ets_model(data = data, h = h)
+          return(list(
+            skellam = skellam,
+            arima = arima,
+            ets = ets
+          ))
+          }
+    )
 }
+
 arima_model <- function(data, h){
   t_cut <- max(data$logged_time) - lubridate::hours(h)
   split_rows_on <- which(min(abs(t_cut - data$logged_time)) == abs(t_cut - data$logged_time))
@@ -23,22 +43,15 @@ arima_model <- function(data, h){
   data_test <- data[-(1:split_rows_on), ]
 
   arima_fit <- data_train %>% model(arima = ARIMA(home_odds ~ pdq(p = 0:3, d = 0:2, q = 0:3)))
-
-  arima_forecast <- arima_fit %>%  forecast(h = h)
-
-  odds_plot <- na.omit(data) %>% ggplot(aes(x = logged_time, y = home_odds)) +
-    geom_line()
-
+  arima_forecast <- arima_fit %>%  forecast(h = 2*h)
   arima_forecast_plot <- arima_forecast %>% autoplot(na.omit(data)) +
     labs(title = "ARIMA Forecast",
          y = "Home Odds",
          x = "Time")
 
-
   list <- list(
     accuracy = accuracy(arima_forecast, data_test),
     forecast = arima_forecast,
-    odds_plot = odds_plot,
     arima_forecast_plot = arima_forecast_plot,
     model = arima_fit
   )
@@ -48,18 +61,13 @@ arima_model <- function(data, h){
 ets_model <- function(data, h) {
   t_cut <- max(data$logged_time) - lubridate::hours(h)
   split_rows_on <- which( min(abs(t_cut - data$logged_time)) == abs(t_cut - data$logged_time))
+  odds_interp <- approx(data$logged_time, xout = data$logged_time , data$home_odds, rule = 2)
+  data$home_odds <- odds_interp$y
   data_train <- data[1:split_rows_on, ]
   data_test <- data[-(1:split_rows_on), ]
 
-  y_interp <- approx(data_train$logged_time, xout = data_train$logged_time , data_train$home_odds, rule = 2)
-  data_train$home_odds <- y_interp$y
-
-  ets_fit <- data_train %>% model(ets = ETS(home_odds ~ error(c("A", "M")) + trend(c("A", "N", "Ad")) + season(c("N", "A", "M"))))
-  ets_forecast <- ets_fit %>% forecast(h = h)
-
-  odds_plot <- na.omit(data) %>% ggplot(aes(x = logged_time, y = home_odds)) +
-    geom_line()
-
+  ets_fit <- data_train %>% model(ets = ETS(home_odds))
+  ets_forecast <- ets_fit %>% forecast(h = 2*h)
   ets_forecast_plot <- ets_forecast %>% autoplot(na.omit(data)) +
     labs(title = "ETS Forecast",
          y = "Home Odds",
@@ -68,7 +76,6 @@ ets_model <- function(data, h) {
   list <- list(
     accuracy = accuracy(ets_forecast, data_test),
     forecast = ets_forecast,
-    odds_plot = odds_plot,
     forecast_plot = ets_forecast_plot,
     model = ets_fit
   )
@@ -113,23 +120,17 @@ skellam_model <- function(data, tickSize = 0.01, h = 36, M = 2000) {
     MAE  = mean(abs(data_test$home_odds - forecast$mean[1:nrow(data_test)]), na.rm = TRUE)
   )
 
-  odds_plot <- na.omit(data) %>%
-    ggplot(aes(x = logged_time, y = home_odds)) +
-    geom_line() +
-    labs(title = "Odds time series")
-
-  forecast_plot <- ggplot(na.omit(data_train)) +
+  forecast_plot <- ggplot(na.omit(data)) +
     geom_line(aes(logged_time, home_odds)) +
     geom_line(data = forecast, aes(logged_time, mean), colour = "blue") +
     geom_ribbon(data = forecast, aes(logged_time, ymin = lower, ymax = upper), alpha = 0.2) +
-    labs(title = "SKELLAM Forecast", y = "Home Odds", x = "Time")
+    labs(title = "Skellam Forecast", y = "Home Odds", x = "Time")
 
   list(
   accuracy = accuracy,
   forecast = forecast,
-  odds_plot = odds_plot,
   forecast_plot = forecast_plot,
-  model = list(
+  params = list(
     lambda_pos = lambda_pos_hat,
     lambda_neg = lambda_neg_hat
     )
