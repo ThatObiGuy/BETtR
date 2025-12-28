@@ -1,3 +1,14 @@
+#' Title
+#'
+#' @param data
+#' @param h
+#' @param model
+#' @param ...
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 predict.bettr_data <- function(data, h, model = c("all", "skellam", "arima", "ets"), ...) {
   if(!inherits(data, "bettr_data"))
     stop("Calling predict.bettr_data on a non-bettr object")

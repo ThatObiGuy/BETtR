@@ -5,6 +5,7 @@
 #' @author Sean F. O'Leary - <\email{sean.oleary.2023@@mumail.ie}>
 #' @docType package
 #' @keywords package
+"_PACKAGE" # Stops dev tools from building a .onAttach.Rd
 
 .onAttach <- function(libname, pkgname)
 {

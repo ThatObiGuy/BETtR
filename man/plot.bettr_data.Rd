@@ -4,10 +4,14 @@
 \alias{plot.bettr_data}
 \title{Plot BETtR data}
 \usage{
-\method{plot}{bettr_data}(x, ...)
+\method{plot}{bettr_data}(x, odd = c("CF", "OF"), ...)
 }
 \arguments{
-\item{x}{An object of class \code{"bettr_data"} - You can use the inbuilt dataset, \code{"football"} or using your own odds data after using the \code{link{make_bettr}} function.}
+\item{x}{An object of class \code{"bettr_data"} - You can use the inbuilt dataset,
+\code{"football"} or using your own odds data after using the \code{link{make_bettr}} function.}
+
+\item{odd}{Either \code{"CF"} or \code{"OF"} for Closing Favourite  or Opening Favourite respectively.
+Defaults to \code{"CF"}.}
 
 \item{...}{Catches unused arguments to \code{plot} (not currently implemented).}
 }
@@ -15,7 +19,7 @@
 a ggplot using geom_line to show the odds movement over time
 }
 \description{
-Plots percentage change of the odds of a (or many) opening favorite(s) change over time.
+Plots percentage change of the odds of a (or many) opening favourite(s) change over time.
 }
 \examples{
 plot(football)

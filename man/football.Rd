@@ -11,7 +11,7 @@ A data frame with 1573 observations (10 matches with ~160 observations from each
 data(football)
 }
 \description{
-Data on the odds at different time points of a series of matches from the 2025 English premier league, including max bettable amounts at these intervals.
+Data on the odds at different time points of a series of matches from the 2025 English premier league, including maximum allowable bets (in euro) at these intervals.
 }
 \examples{
 data(football, package="bettr")

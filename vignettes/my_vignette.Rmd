@@ -80,7 +80,7 @@ The return object inherits from `tsibble` and can be used with other methods pro
 
 ### Plotting odds
 
-__BETtR__ provides a plotting method for `bettr_data` objects. Plots percentage change of the odds of a (or many) opening favorite(s) change over time.
+__BETtR__ provides a plotting method for `bettr_data` objects. Plots percentage change of the odds of a (or many) opening favourite(s) change over time.
 
 ```{r, eval=FALSE}
 plot(bettr_obj)

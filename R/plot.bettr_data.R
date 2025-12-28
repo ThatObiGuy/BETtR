@@ -1,23 +1,26 @@
-#' Plot BETtR data
+#' Plot BETtR data (interactive)
 #'
-#' Plots percentage change of the odds of a (or many) opening favorite(s) change over time.
+#' Plots percentage change of the odds of a (or many) opening favorite(s) change over time,
+#' with interactive tooltips for the event IDs.
 #'
 #' @param x An object of class \code{"bettr_data"} - You can use the inbuilt dataset,
-#' \code{"football"} or using your own odds data after using the \code{link{make_bettr}} function.
+#' \code{"football"} or using your own odds data after using the \code{\link{make_bettr}} function.
 #' @param odd Either \code{"CF"} or \code{"OF"} for Closing Favorite or Opening Favorite respectively.
 #' Defaults to \code{"CF"}.
-#' @param ... Catches unused arguments to \code{plot} (not currently implemented).
+#' @param ... Additional arguments passed to \code{ggiraph::girafe()} for specifying dimensions of output.
 #'
-#' @returns a ggplot using geom_line to show the odds movement over time
+#' @returns a \code{ggiraph} object showing the odds movement over time
 #'
 #' @export
 #' @author Owen F. O'Connor - <\email{owen.oconnor.2024@@mumail.ie}>
 #'
 #' @importFrom dplyr "as_tibble" "group_by" "slice_min" "mutate" "case_when" "select" "left_join"
 #' @importFrom ggplot2 "ggplot" "geom_line"
+#' @importFrom ggiraph "geom_line_interactive" "girafe"
 #'
 #' @examples
 #' plot(football)
+#' plot(football, odd = "CF", width_svg = 8)
 plot.bettr_data <- function(x, odd = c("CF", "OF"), ...) {
 
   # Checking x is of class bettr_data
@@ -42,8 +45,7 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), ...) {
                     opening_fav_odds = dplyr::case_when(
                       fav_choice == "home_odds" ~ home_odds,
                       fav_choice == "draw_odds" ~ draw_odds,
-                      fav_choice == "away_odds" ~ away_odds
-                    )) |>
+                      fav_choice == "away_odds" ~ away_odds)) |>
       dplyr::select(event_id, fav_choice, opening_fav_odds) -> x_target_odd
 
   } else if (odd == "CF") {
@@ -56,10 +58,10 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), ...) {
     x_target_odd |>
       dplyr::left_join(opening_odds, by = "event_id") |>
       dplyr::mutate(opening_fav_odds = dplyr::case_when(
-                      fav_choice == "home_odds" ~ home_odds,
-                      fav_choice == "draw_odds" ~ draw_odds,
-                      fav_choice == "away_odds" ~ away_odds
-                    )) |>
+        fav_choice == "home_odds" ~ home_odds,
+        fav_choice == "draw_odds" ~ draw_odds,
+        fav_choice == "away_odds" ~ away_odds
+      )) |>
       dplyr::select(event_id, fav_choice, opening_fav_odds) -> x_target_odd
 
   }
@@ -73,17 +75,28 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), ...) {
         fav_choice == "draw_odds" ~ draw_odds,
         fav_choice == "away_odds" ~ away_odds
       ),
-      pct_change_fav_odds = (fav_odds - opening_fav_odds) / opening_fav_odds * 100 ) |>
-    dplyr::select(event_id, logged_time, pct_change_fav_odds) -> x_plottable
+      pct_change_fav_odds = (fav_odds - opening_fav_odds) / opening_fav_odds * 100,
+      tooltip = paste0("event_id: ", event_id)
+    ) |>
+    dplyr::select(event_id, logged_time, pct_change_fav_odds, tooltip) -> x_plottable
   # Scale and location adjustments are so that we can focus on displaying movement on a similar scale with a fixed start.
   # A percentage change is a very reasonable scale
 
-  p <- ggplot2::ggplot(x_plottable, ggplot2::aes(x=logged_time, y=pct_change_fav_odds, colour=event_id)) +
+  p <- ggplot2::ggplot(
+    x_plottable,
+    ggplot2::aes(
+      x = logged_time,
+      y = pct_change_fav_odds,
+      colour = event_id,
+      tooltip = tooltip,
+      data_id = event_id
+    )
+  ) +
     ggplot2::theme_minimal() +
     ggplot2::xlab("Time") +
     ggplot2::ylab("Odds Change (%)") +
     ggplot2::ggtitle(paste("Change over time of odds data (", odd, ")")) +
-    ggplot2::geom_line()
+    ggiraph::geom_line_interactive()
 
-  print(p)
+  ggiraph::girafe(ggobj = p, ...)
 }
