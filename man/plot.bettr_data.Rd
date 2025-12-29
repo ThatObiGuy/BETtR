@@ -2,27 +2,37 @@
 % Please edit documentation in R/plot.bettr_data.R
 \name{plot.bettr_data}
 \alias{plot.bettr_data}
-\title{Plot BETtR data}
+\title{Plot BETtR data (interactive)}
 \usage{
-\method{plot}{bettr_data}(x, odd = c("CF", "OF"), ...)
+\method{plot}{bettr_data}(x, odd = c("CF", "OF"), fixture = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{"bettr_data"} - You can use the inbuilt dataset,
-\code{"football"} or using your own odds data after using the \code{link{make_bettr}} function.}
+\code{"football"} or using your own odds data after using the \code{\link{make_bettr}} function.}
 
-\item{odd}{Either \code{"CF"} or \code{"OF"} for Closing Favourite  or Opening Favourite respectively.
+\item{odd}{Either \code{"CF"} or \code{"OF"} for Closing Favorite or Opening Favorite respectively.
 Defaults to \code{"CF"}.}
 
-\item{...}{Catches unused arguments to \code{plot} (not currently implemented).}
+\item{fixture}{Optional additional column in \code{x} to use for tooltips
+and legend instead of \code{event_id}. Defaults to NULL (uses \code{event_id}).}
+
+\item{...}{Additional arguments passed to \code{ggiraph::girafe()} for specifying dimensions of output.}
 }
 \value{
-a ggplot using geom_line to show the odds movement over time
+a \code{ggiraph} object showing the odds movement over time
 }
 \description{
-Plots percentage change of the odds of a (or many) opening favourite(s) change over time.
+Plots percentage change of the odds of a (or many) opening favorite(s) change over time,
+with interactive tooltips for the event IDs.
 }
 \examples{
 plot(football)
+plot(football, odd = "CF", width_svg = 8)
+
+football2 <- football |>
+  dplyr::mutate(fixture = paste(home_team, "vs", away_team))
+
+plot(football2, fixture = "fixture")
 }
 \author{
 Owen F. O'Connor - <\email{owen.oconnor.2024@mumail.ie}>

@@ -3,7 +3,7 @@ title: "Getting started with BETtR"
 author: "Owen O'Connor, Sorin Bivol, Sean O'Leary, Ivan Cakic"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting started with BETtR}
+  %\VignetteIndexEntry{BETtR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -82,8 +82,8 @@ The return object inherits from `tsibble` and can be used with other methods pro
 
 __BETtR__ provides a plotting method for `bettr_data` objects. Plots percentage change of the odds of a (or many) opening favourite(s) change over time.
 
-```{r, eval=FALSE}
-plot(bettr_obj)
+```{r, fig.width=7, fig.height=4}
+plot(football)
 ```
 
 Odds are scaled relative to their opening value so that the movement across different events can be compared on a common scale.
@@ -101,7 +101,7 @@ The prediction interface applies time–series–based models to the odds trajec
 The method automatically checks for gaps in the time index and applies interpolation where necessary.
 
 ```{r, eval=FALSE}
-predict(bettr_obj, h = 67)
+predict(football, h = 67)
 ```
 
 
@@ -110,7 +110,7 @@ predict(bettr_obj, h = 67)
 The package will include example betting odds datasets that have already been processed into `bettr_data` objects. These datasets can be used to experiment with the package functionality once finalised.
 
 ```{r, eval=FALSE}
-data(epl_weekend_data)
-plot(epl_weekend_data)
+data("football")
+plot(football)
 ```
 

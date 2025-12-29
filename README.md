@@ -24,7 +24,7 @@ library(bettr)
 For a more comprehensive guide other than `?bettr`, run the following command to get a detailed introduction and examples are available in the package vignette:
 
 ```r
-vignette("BETtR", package="BETtR")
+vignette("BETtR", package="bettr")
 ```
 
 ## Basic Usage
