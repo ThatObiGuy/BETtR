@@ -21,7 +21,13 @@ Imports:
     dplyr,
     ggiraph,
     ggplot2,
-    tsibble
+    tsibble,
+    fabletools,
+    magrittr,
+    lubridate,
+    skellam,
+    forecast,
+    fable
 Suggests: 
     htmltools,
     knitr,

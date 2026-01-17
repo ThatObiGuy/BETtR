@@ -11,49 +11,95 @@ make_bettr(
   home_odds = "home_odds",
   away_odds = "away_odds",
   draw_odds = "draw_odds",
-  make_tsibble = FALSE,
+  make_tsibble = TRUE,
+  drop_NA_values = FALSE,
   ...
 )
 }
 \arguments{
-\item{data}{An object containing betting data.}
+\item{data}{An object containing betting data}
 
-\item{event_id}{Name of the column containing the unique event identifier in
-\code{data}.}
+\item{event_id}{A string of the name of the column containing the event id
+\code{data}. For example
+\code{event_id = "name of column with event_id"}. The default being
+\code{event_id = "event_id"}.}
 
-\item{logged_time}{Name of the column containing the logged time for
-each event in \code{data}.}
+\item{logged_time}{A string of the name of the column containing the logged
+time for each event in \code{data}. For example
+\code{logged_time = "name of column with logged_time"}. The default being
+\code{logged_time = "logged_time"}.}
 
-\item{home_odds}{Name of the column containing home odds in \code{data}.}
+\item{home_odds}{A string of the name of the column containing home odds in
+\code{data}. For example \code{home_odds = "name of column with home_odds"}.
+The default being \code{home_odds = "home_odds"}.}
 
-\item{away_odds}{Name of the column containing away odds in \code{data}.}
+\item{away_odds}{A string of the name of the column containing away odds in
+\code{data}. For example \code{away_odds = "name of column with away_odds"}.
+The default being \code{away_odds = "away_odds"}.}
 
-\item{draw_odds}{Name of the column containing draw odds in \code{data}.}
+\item{draw_odds}{A string of the name of the column containing draw odds in
+\code{data}. For example \code{draw_odds = "name of column with draw_odds"}.
+The default being \code{draw_odds = "draw_odds"}.}
 
-\item{make_tsibble}{Logical; if \code{TRUE}, convert data to a tsibble.}
+\item{make_tsibble}{A logical argument that converts the object to a type
+tsibble, argument is set to \code{make_tsibble = TRUE} by default.}
 
-\item{...}{Catches unused arguments}
+\item{drop_NA_values}{A logical argument that drops any rows with NA values,
+argument is set to \code{drop_NA_values = FALSE} by default.}
+
+\item{...}{additional arguments passed to  \code{as_tsibble()}}
 }
 \value{
-returns an object of class \code{bettr_data}.
+returns an object of class \code{bettr_data}. Also adds class
+\code{tbl_ts}, \code{tbl_df} and \code{tbl} if \code{make_tsibble = TRUE}.
 }
 \description{
-Convert a dataset to a bettr dataset ready for analysis
+make_bettr makes a betting dataset ready for analysis by checking for the
+required columns (\code{event_id}, \code{logged_time}, \code{home_odds},
+\code{away_odds}, and \code{draw_odds}) that each bettr dataset must have.
+make_bettr checks that the odds (home, away, draw) columns are numeric.
+Counts rows with missing values with a warning message and can optionally
+remove those rows if the logical argument \code{drop_NA_values = TRUE}.
+Additionally it converts \code{data} into a \code{tsibble} ready for time
+series analysis, or it can be left as the original dataframe by setting
+\code{make_tsibble = FALSE}.
+}
+\note{
+The columns (home_odds, away_odds, draw_odds) must be numeric.
+ The column logged_time must be of class POSIXct. If converting to a
+ tsibble, the rows with NA values in logged_time will prevent the
+ as_tsibble conversion.
+ If there are missing values in the required columns and drop_NA_values is
+ set to False, a warning is given. It is recommended to remove these for
+ proper analysis.
 }
 \examples{
 # Example with package dataset
 data(football)
 
 x <- make_bettr(football, make_tsibble = TRUE)
+
 x2 <- make_bettr(football, make_tsibble = FALSE)
-class(x)
-class(x2)
 
-# Example with a generated dataset
-generatedExample <- data.frame(event_id = 1,
-logged_time = as.POSIXct("2024-01-01 12:00:00"), home_odds = 2.89,
-away_odds = 2.40, drawOdds = 3.36)
+#example with generated dataset that contains NAs and custom column names
+generatedExample <- data.frame(idOfEvent = 1:3,
+  log_time = as.POSIXct(c("2024-01-01 12:00:00",
+                          "2024-01-02 12:00:00",NA)),
+  home_odds = c(2.55, 1.55, 3.11), away_odds = c(2.11, 3.22, 1.33),
+  drawOdds = c(3.36, 3.00, NA)
+)
 
-x3 <- make_bettr(generatedExample, draw_odds = "drawOdds")
-class(x3)
+\dontrun{
+# NAs will be kept and just issue a warning
+x3 <- make_bettr(generatedExample, draw_odds = "drawOdds",
+                 away_odds = "away_odds", logged_time = "log_time",
+                 event_id = "idOfEvent") }
+
+# Remove NAs by setting drop_NA_values to TRUE
+x4 <- make_bettr(generatedExample, draw_odds = "drawOdds",
+                 away_odds = "away_odds", logged_time = "log_time",
+                 event_id = "idOfEvent", drop_NA_values = TRUE)
+}
+\author{
+Sorin Bivol - <\email{SORIN.BIVOL.2023@mumail.ie}>
 }

@@ -95,7 +95,7 @@ Odds are scaled relative to their opening value so that the movement across diff
 The prediction interface applies time–series–based models to the odds trajectory of a given event, allowing users to compare different forecasting approaches. Currently implemented models include:
 
 * ARIMA models for autoregressive time-series forecasting
-* Exponential smoothing (ETS) models with optional interpolation for irregular time data
+* Exponential smoothing (ETS) models with interpolation for irregular time data
 * A Skellam–based model designed for discrete odds movements.
 
 The method automatically checks for gaps in the time index and applies interpolation where necessary.

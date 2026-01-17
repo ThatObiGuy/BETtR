@@ -2,13 +2,29 @@
 % Please edit documentation in R/predict.bettr_data.R
 \name{predict.bettr_data}
 \alias{predict.bettr_data}
-\title{Title}
+\title{Apply a list of models to a dataset featuring betting odds}
 \usage{
-\method{predict}{bettr_data}(data, h, model = c("all", "skellam", "arima", "ets"), ...)
+\method{predict}{bettr_data}(object, odds, h = 36, model = c("all", "skellam", "arima", "ets"), ...)
 }
 \arguments{
-\item{...}{}
+\item{object}{The object on which the Skellam, Arima and ETS models may be applied.}
+
+\item{odds}{A string which is the name of the column the user wishes to investigate.}
+
+\item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+
+\item{model}{Which models are to be applied to the data. Defaults to "all".}
+
+\item{...}{Extra parameters to be passed to the Skellam model.}
+}
+\value{
+A list featuring the models fitted, their forecast plot and forecasted values.
 }
 \description{
-Title
+Apply a list of models to a dataset featuring betting odds
+}
+\examples{
+data <- subset(football, home_team == "Sunderland")
+data <- make_bettr(data)
+predict(data, odds = "home_odds", h = 24, model = "all", M = 1000, tickSize = 0.01)
 }

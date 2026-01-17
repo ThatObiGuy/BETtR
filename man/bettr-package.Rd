@@ -59,8 +59,9 @@ football2 <- football |>
 
 plot(football2, fixture = "fixture")
 
-# Apply prediciton method to football example dataset
-predict(football, h = 67)
+# Apply prediction method to football example dataset
+football_match <- subset(football, home_team == "Everton")
+predict(football_match, odds = "away_odds", h = 67, model = "skellam")
 
 
 # Generate a small synthetic dataset to show general use of Bettr function & methods
@@ -85,7 +86,7 @@ example_bettr <- make_bettr(generated_data)
 plot(example_bettr)
 
 # Predict synthetic example
-predict(example_bettr, h = 67)
+predict(example_bettr, odds = "home_odds", h = 67, model = "all", M = 2500, tickSize = 0.01)
 
 }
 \seealso{
