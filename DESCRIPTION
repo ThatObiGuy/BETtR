@@ -19,6 +19,7 @@ Depends:
     R (>= 4.5.0)
 Imports: 
     dplyr,
+    genzplyr,
     ggiraph,
     ggplot2,
     tsibble,
@@ -28,6 +29,8 @@ Imports:
     skellam,
     forecast,
     fable
+Remotes:
+    hadley/genzplyr
 Suggests: 
     htmltools,
     knitr,
