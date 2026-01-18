@@ -109,14 +109,13 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
   x_plottable <- x_plottable |>
     dplyr::select(event_id, legend_label, logged_time, pct_change_fav_odds, tooltip)
 
-  p <- ggplot2::ggplot(
+  # Core ggplot object (shared by both interactive and static)
+  p_base <- ggplot2::ggplot(
     x_plottable,
     ggplot2::aes(
       x = logged_time,
       y = pct_change_fav_odds,
-      colour = legend_label,
-      tooltip = tooltip,
-      data_id = event_id
+      colour = legend_label
     )
   ) +
     ggplot2::theme_minimal() +
@@ -125,8 +124,23 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
     ggplot2::ggtitle(ifelse(odd == "CF",
                             "Change over time of closing favourite odds",
                             "Change over time of opening favourite odds")) +
-    ggiraph::geom_line_interactive() +
     ggplot2::scale_color_discrete(name = if (is.null(fixture)) "Event ID" else "Fixture")
 
-  ggiraph::girafe(ggobj = p, ...)
+  output <- try(
+    {
+      p_interactive <- p_base +
+        ggiraph::geom_line_interactive(
+          ggplot2::aes(tooltip = tooltip, data_id = event_id)
+        )
+      ggiraph::girafe(ggobj = p_interactive, ...)
+    },
+    silent = TRUE
+  )
+
+  if (inherits(output, "try-error")) {
+    message("interactive plotting failed, reverting to static")
+    p_base + ggplot2::geom_line()
+  } else {
+    output
+  }
 }
