@@ -1,5 +1,7 @@
 library(bettr)
 
+football <- make_bettr(football, make_tsibble = FALSE)
+
 test_that("plot.bettr_data errors on wrong class", {
   expect_error(plot.bettr_data(mtcars),"x must be of class 'bettr_data'")
 })

@@ -26,6 +26,7 @@ Plots percentage change of the odds of a (or many) opening favorite(s) change ov
 with interactive tooltips for the event IDs.
 }
 \examples{
+football <- make_bettr(football, make_tsibble = FALSE)
 plot(football)
 plot(football, odd = "CF", width_svg = 8)
 

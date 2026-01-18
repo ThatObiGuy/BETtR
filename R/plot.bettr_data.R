@@ -21,6 +21,7 @@
 #' @importFrom ggiraph "geom_line_interactive" "girafe"
 #'
 #' @examples
+#' football <- make_bettr(football, make_tsibble = FALSE)
 #' plot(football)
 #' plot(football, odd = "CF", width_svg = 8)
 #'
