@@ -3,7 +3,7 @@
 #' make_bettr makes a betting dataset ready for analysis by checking for the
 #' required columns (\code{event_id}, \code{logged_time}, \code{home_odds},
 #' \code{away_odds}, and \code{draw_odds}) that each bettr dataset must have.
-#' make_bettr checks that the odds (home, away, draw) columns are numeric.
+#' Make_bettr checks that the odds (home, away, draw) columns are numeric.
 #' Counts rows with missing values with a warning message and can optionally
 #' remove those rows if the logical argument \code{drop_NA_values = TRUE}.
 #' Additionally it converts \code{data} into a \code{tsibble} ready for time
@@ -49,9 +49,12 @@
 #'
 #' @export
 #' @author Sorin Bivol - <\email{SORIN.BIVOL.2023@@mumail.ie}>
-#' @importFrom dplyr "arrange"
+#' @importFrom dplyr "arrange" "all_of" "across"
 #' @importFrom tsibble "as_tsibble"
+#' @importFrom stats  "complete.cases"
+
 #' @examples
+#'
 #' # Example with package dataset
 #' data(football)
 #'
@@ -85,6 +88,13 @@ make_bettr <- function(data,
                        away_odds = "away_odds",
                        draw_odds = "draw_odds", make_tsibble = TRUE,
                        drop_NA_values = FALSE, ...) {
+
+
+  if (inherits(data, "bettr_data")) {
+    stop("Dataset is already of class 'bettr_data'.",
+    "\napply make_bettr() to non bettr datasets .", call. = FALSE)
+  }
+
   #checking if it has the 5 required columns to be a bettr object
   req <- c(event_id, logged_time, home_odds, away_odds, draw_odds)
   allReqNotInData <- setdiff(req, names(data))
@@ -100,7 +110,7 @@ make_bettr <- function(data,
   }
   # Checks for missing rows:
   # use complete.cases: want rows
-  ok <- complete.cases(data[, req])
+  ok <- stats::complete.cases(data[, req])
   if(any(!ok)) {
    if(sum(!ok) == 1) {
     # rows is plural cant have that for 1 row
@@ -122,23 +132,23 @@ make_bettr <- function(data,
 
   if(!inherits(data[[logged_time]], "POSIXct"))
   {
-    stop("logged time column must be in the format POSIXct:
-         'YYYY-MM-DD HH:MM:SS'")
+    stop("logged time column must be in the format POSIXct: 'YYYY-MM-DD HH:MM:SS'")
   }
   if (!(is.numeric(data[[event_id]])
        || is.character(data[[event_id]]) || is.factor(data[[event_id]]))){
     stop("event_id must be of type character, factor or numeric")
   }
   # arrange by ids then time and .data so we can allow event_id <- "event"
-  data <- data %>% dplyr::arrange(.data[[event_id]], .data[[logged_time]])
-  data[[event_id]] <- factor(data[[event_id]],  # factors ids and rids duplicates
+  data <- dplyr::arrange(data,
+                         dplyr::across(dplyr::all_of(c(event_id, logged_time))))
+  data[[event_id]] <- factor(data[[event_id]],# factors ids and rids duplicates
                              levels = unique(data[[event_id]]))
 
   if (make_tsibble)
   {
     if (anyNA(data[[logged_time]])) {
-      stop("\nLogged time column has missing values (NAs).", "They need to be
-           removed by setting drop_NA_values to TRUE."
+      stop("\nLogged time column has missing values (NAs).",
+      "\nThey need to be removed by setting drop_NA_values to TRUE."
       , " \nCannot create a tsibble if theres missing values in logged_time")
     }
     data <- tsibble::as_tsibble(data, key = event_id, index = logged_time, ...)

@@ -57,7 +57,7 @@ returns an object of class \code{bettr_data}. Also adds class
 make_bettr makes a betting dataset ready for analysis by checking for the
 required columns (\code{event_id}, \code{logged_time}, \code{home_odds},
 \code{away_odds}, and \code{draw_odds}) that each bettr dataset must have.
-make_bettr checks that the odds (home, away, draw) columns are numeric.
+Make_bettr checks that the odds (home, away, draw) columns are numeric.
 Counts rows with missing values with a warning message and can optionally
 remove those rows if the logical argument \code{drop_NA_values = TRUE}.
 Additionally it converts \code{data} into a \code{tsibble} ready for time
@@ -74,6 +74,7 @@ The columns (home_odds, away_odds, draw_odds) must be numeric.
  proper analysis.
 }
 \examples{
+
 # Example with package dataset
 data(football)
 
