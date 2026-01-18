@@ -92,7 +92,7 @@ make_bettr <- function(data,
 
   if (inherits(data, "bettr_data")) {
     stop("Dataset is already of class 'bettr_data'.",
-    "\napply make_bettr() to non bettr datasets .", call. = FALSE)
+    "\n Apply make_bettr() to non bettr datasets .", call. = FALSE)
   }
 
   #checking if it has the 5 required columns to be a bettr object
