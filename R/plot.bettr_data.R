@@ -1,17 +1,21 @@
-#' Plot BETtR data (interactive)
+#' Plot betting odds movements over time
 #'
-#' Plots percentage change of the odds of a (or many) opening favorite(s) change over time,
-#' with interactive tooltips for the event IDs.
+#' Creates an interactive visualisation of percentage changes in betting odds
+#' relative to opening values. Produces a \code{\link[ggiraph]{girafe}} object
+#' with interactive tooltips, falling back to static \code{\link[ggplot2]{ggplot}}
+#' if interactive plotting fails.
 #'
-#' @param x An object of class \code{"bettr_data"} - You can use the inbuilt dataset,
-#' \code{"football"} or using your own odds data after using the \code{\link{make_bettr}} function.
-#' @param odd Either \code{"CF"} or \code{"OF"} for Closing Favorite or Opening Favorite respectively.
-#' Defaults to \code{"CF"}.
-#' @param fixture Optional additional column in \code{x} to use for tooltips
-#' and legend instead of \code{event_id}. Defaults to NULL (uses \code{event_id}).
-#' @param ... Additional arguments passed to \code{ggiraph::girafe()} for specifying dimensions of output.
+#' @param x An object of class \code{"bettr_data"}. See \code{\link{make_bettr}}.
+#' @param odd Character string. Either \code{"CF"} (closing favourite) or
+#'   \code{"OF"} (opening favourite). Default is \code{"CF"}.
+#' @param fixture Character string or \code{NULL}. Optional column name in \code{x}
+#'   to use for tooltips and legend labels instead of \code{event_id}.
+#'   Default is \code{NULL}.
+#' @param ... Additional arguments passed to \code{\link[ggiraph]{girafe}} for
+#'   controlling plot dimensions (e.g., \code{width_svg}, \code{height_svg}).
 #'
-#' @returns a \code{ggiraph} object showing the odds movement over time
+#' @returns An object of class \code{"girafe"} (interactive plot) or \code{"gg"}
+#'   (static ggplot2 plot if interactive plotting fails).
 #'
 #' @export
 #' @author Owen F. O'Connor - <\email{owen.oconnor.2024@@mumail.ie}>
@@ -20,6 +24,8 @@
 #' @importFrom genzplyr "squad_up" "glow_up" "vibe_check"
 #' @importFrom ggplot2 "ggplot" "geom_line" "scale_color_discrete"
 #' @importFrom ggiraph "geom_line_interactive" "girafe"
+#'
+#' @seealso \code{\link{make_bettr}}, \code{\link{predict.bettr_data}}
 #'
 #' @examples
 #' football <- make_bettr(football, make_tsibble = FALSE)

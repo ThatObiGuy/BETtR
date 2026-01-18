@@ -1,11 +1,26 @@
-#' Odds from 10 different soccer matches
+#' English Premier League betting odds data
 #'
-#' Data on the odds at different time points of a series of matches from the 2025 English premier league, including maximum allowable bets (in euro) at these intervals.
-#' @format A data frame with 1573 observations (10 matches with ~160 observations from each) and 9 columns. It contains the required columns of a bettr_data object with additional info about maximum bettable amount and start times.
+#' Betting market odds from 10 English Premier League football matches in 2025,
+#' recorded at multiple timepoints before each match. Includes home, away, and
+#' draw odds along with maximum allowable bet amounts in euros.
+#'
+#' @format A data frame with 1,573 observations and 9 variables:
+#' \describe{
+#'   \item{event_id}{Numeric identifier for each match}
+#'   \item{logged_time}{POSIXct timestamp when odds were recorded}
+#'   \item{home_odds}{Decimal odds for home team win}
+#'   \item{away_odds}{Decimal odds for away team win}
+#'   \item{draw_odds}{Decimal odds for draw}
+#'   \item{home_team}{Character string with home team name}
+#'   \item{away_team}{Character string with away team name}
+#'   \item{max_bet_home}{Maximum bet amount in euros for home odds}
+#'   \item{max_bet_away}{Maximum bet amount in euros for away odds}
+#' }
 #' @examples
 #' data(football, package="bettr")
 #' pairs(football[,-(1:2)], col=football$home_team)
 #' @docType data
 #' @keywords datasets
 #' @usage data(football)
+#' @source English Premier League 2025 season betting markets
 "football"

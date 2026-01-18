@@ -2,28 +2,32 @@
 % Please edit documentation in R/plot.bettr_data.R
 \name{plot.bettr_data}
 \alias{plot.bettr_data}
-\title{Plot BETtR data (interactive)}
+\title{Plot betting odds movements over time}
 \usage{
 \method{plot}{bettr_data}(x, odd = c("CF", "OF"), fixture = NULL, ...)
 }
 \arguments{
-\item{x}{An object of class \code{"bettr_data"} - You can use the inbuilt dataset,
-\code{"football"} or using your own odds data after using the \code{\link{make_bettr}} function.}
+\item{x}{An object of class \code{"bettr_data"}. See \code{\link{make_bettr}}.}
 
-\item{odd}{Either \code{"CF"} or \code{"OF"} for Closing Favorite or Opening Favorite respectively.
-Defaults to \code{"CF"}.}
+\item{odd}{Character string. Either \code{"CF"} (closing favourite) or
+\code{"OF"} (opening favourite). Default is \code{"CF"}.}
 
-\item{fixture}{Optional additional column in \code{x} to use for tooltips
-and legend instead of \code{event_id}. Defaults to NULL (uses \code{event_id}).}
+\item{fixture}{Character string or \code{NULL}. Optional column name in \code{x}
+to use for tooltips and legend labels instead of \code{event_id}.
+Default is \code{NULL}.}
 
-\item{...}{Additional arguments passed to \code{ggiraph::girafe()} for specifying dimensions of output.}
+\item{...}{Additional arguments passed to \code{\link[ggiraph]{girafe}} for
+controlling plot dimensions (e.g., \code{width_svg}, \code{height_svg}).}
 }
 \value{
-a \code{ggiraph} object showing the odds movement over time
+An object of class \code{"girafe"} (interactive plot) or \code{"gg"}
+  (static ggplot2 plot if interactive plotting fails).
 }
 \description{
-Plots percentage change of the odds of a (or many) opening favorite(s) change over time,
-with interactive tooltips for the event IDs.
+Creates an interactive visualisation of percentage changes in betting odds
+relative to opening values. Produces a \code{\link[ggiraph]{girafe}} object
+with interactive tooltips, falling back to static \code{\link[ggplot2]{ggplot}}
+if interactive plotting fails.
 }
 \examples{
 football <- make_bettr(football, make_tsibble = FALSE)
@@ -34,6 +38,9 @@ football2 <- football |>
   genzplyr::glow_up(fixture = paste(home_team, "vs", away_team))
 
 plot(football2, fixture = "fixture")
+}
+\seealso{
+\code{\link{make_bettr}}, \code{\link{predict.bettr_data}}
 }
 \author{
 Owen F. O'Connor - <\email{owen.oconnor.2024@mumail.ie}>

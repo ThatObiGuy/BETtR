@@ -1,36 +1,39 @@
 Type: Package
 Package: bettr
-Title: Calculate Shannon Entropy and Provide Optimisation Functions
+Title: 'BETtR' functions for analysing data from odds markets
 Version: 0.1.0
+Date: 2026-01-21
 Authors@R: c(
-    person("Owen", "O'Connor", , "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
+    person(c("Owen", "Frank"), "O'Connor", , "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
     person("Sorin", "Bivol", , "sorin.bivol.2023@mumail.ie", role = "aut"),
     person("Sean", "O'Leary", , "sean.oleary.2023@mumail.ie", role = "aut"),
-    person("Ivan", "Cakic", , "ivan.cakic.2023@muail.ie", role = "aut")
+    person("Ivan", "Cakic", , "ivan.cakic.2023@mumail.ie", role = "aut")
   )
-Description: This package will include 1 (or two) inbuilt dataset(s) on
-    202* English Premier League Odds (and 202* Wimbledon odds).  These
-    datasets will be "bettr" datasets.  This package will also contain a
-    function to transform data frames into "bettr" datasets and a generic
-    function to plot (and possibly predict()) "bettr" data.
+Description: Provides tools for structuring, visualising, and forecasting
+    betting market odds data. This package converts raw betting odds into
+    'bettr_data' objects via the make_bettr() function.  Plotting methods
+    visualise odds movements over time with interactive tooltips, while
+    prediction methods apply time-series forecasting approaches including
+    ARIMA, exponential smoothing (ETS), and Skellam-based models to
+    betting odds trajectories. The package includes a built-in dataset of
+    1,573 observations from 10 English Premier League 2025 matches for
+    demonstration purposes.
 License: GPL (>= 3)
 BugReports: https://github.com/ThatObiGuy/bettr/issues
 Depends: 
     R (>= 4.5.0)
 Imports: 
     dplyr,
+    fable,
+    fabletools,
+    forecast,
     genzplyr,
     ggiraph,
     ggplot2,
-    tsibble,
-    fabletools,
-    magrittr,
     lubridate,
+    magrittr,
     skellam,
-    forecast,
-    fable
-Remotes:
-    hadley/genzplyr
+    tsibble
 Suggests: 
     htmltools,
     knitr,
@@ -38,6 +41,8 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
+Remotes:
+    hadley/genzplyr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB

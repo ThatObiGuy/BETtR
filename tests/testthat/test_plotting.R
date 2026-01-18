@@ -147,3 +147,29 @@ test_that("plot.bettr_data uses correct legend labels", {
   }
 })
 
+test_that("plot.bettr_data produces static plot when interactive fails", {
+  # Mock girafe to fail, forcing fallback to static plot
+  testthat::with_mocked_bindings(
+    code = {
+      # Expect a message about fallback
+      expect_message(
+        result <- plot(football, odd = "CF"),
+        "interactive plotting failed, reverting to static"
+      )
+
+      # Verify we get a gg object (static), not girafe (interactive)
+      expect_true(inherits(result, "gg"))
+      expect_false(inherits(result, "girafe"))
+
+      # Verify the plot structure is still correct
+      expect_equal(result$labels$x, "Time")
+      expect_equal(result$labels$y, "Odds Change (%)")
+      expect_equal(
+        result$labels$title,
+        "Change over time of closing favourite odds"
+      )
+    },
+    girafe = function(...) stop("Simulated girafe failure"),
+    .package = "ggiraph"
+  )
+})
