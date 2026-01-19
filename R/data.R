@@ -13,8 +13,8 @@
 #'   \item{draw_odds}{Decimal odds for draw}
 #'   \item{home_team}{Character string with home team name}
 #'   \item{away_team}{Character string with away team name}
-#'   \item{max_bet_home}{Maximum bet amount in euros for home odds}
-#'   \item{max_bet_away}{Maximum bet amount in euros for away odds}
+#'   \item{starts}{POSIXct timestamp when match started for each event}
+#'   \item{max_money_line}{Numeric value for Maximum money line available}
 #' }
 #' @examples
 #' data(football, package="bettr")
