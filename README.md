@@ -8,11 +8,13 @@ BETtR provides tools for working with betting odds data observed over time. It i
 
 ## Installation
 
-BETtR is under active development and can be installed from GitHub:
+BETtR is under active development and is not available on CRAN. It can be installed from GitHub.
+
+To install the package **with the vignette built**, run:
 
 ```r
 install.packages("devtools")
-devtools::install_github("ThatObiGuy/BETtR")
+devtools::install_github("ThatObiGuy/BETtR", build_vignettes = TRUE)
 ```
 
 After successful installation you can proceed with loading the package as such:
@@ -21,7 +23,7 @@ After successful installation you can proceed with loading the package as such:
 library(bettr)
 ```
 
-For a more comprehensive guide other than `?bettr`, run the following command to get a detailed introduction and examples are available in the package vignette:
+For a more comprehensive guide other than `?bettr`, run the following command to get full introduction, including worked examples, in the package vignette:
 
 ```r
 vignette("BETtR", package="bettr")
@@ -31,7 +33,7 @@ vignette("BETtR", package="bettr")
 
 ### Convert raw odds data into a bettr_data object
 ```r
-bettr_obj <- make_bettr(raw_odds_data)
+bettr_obj <- make_bettr(raw_odds_data, make_tsibble = TRUE)
 ```
 
 ### Visualise odds movement
@@ -41,7 +43,7 @@ plot(bettr_obj)
 
 ### Explore predictive models
 ```r
-pred <- predict(bettr_obj, h = 67)
+pred <- predict(bettr_obj, odds = "home_odds", h = 24, model = "skellam")
 ```
 
 <img src="https://raw.githubusercontent.com/ThatObiGuy/BETtR/refs/heads/main/plan.jpg"/>

@@ -4,7 +4,7 @@
 \name{bettr-package}
 \alias{bettr}
 \alias{bettr-package}
-\title{BETtR: An R package for structuring, visualising, and exploring betting market odds data.}
+\title{BETtR: Analyse and Forecast Sports Betting Data}
 \description{
 BETtR is an R package for structuring and visualising betting market odds data. It provides tools for converting raw odds data into time-indexed objects, plotting odds movements over time, and applying exploratory time-series-based prediction methods to betting odds trajectories.
 }

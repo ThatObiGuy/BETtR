@@ -1,4 +1,4 @@
-#' BETtR: An R package for structuring, visualising, and exploring betting market odds data.
+#' BETtR: Analyse and Forecast Sports Betting Data
 #'
 #' BETtR is an R package for structuring and visualising betting market odds data. It provides tools for converting raw odds data into time-indexed objects, plotting odds movements over time, and applying exploratory time-series-based prediction methods to betting odds trajectories.
 #'
@@ -98,6 +98,14 @@
 #' @docType package
 #' @keywords package
 "_PACKAGE" # Stops dev tools from building a .onAttach.Rd
+#' View BETtR package news
+#'
+#' Displays the package NEWS file.
+#'
+#' @export
+BETtR_news <- function() {
+  utils::news(package = "bettr")
+}
 
 .onAttach <- function(libname, pkgname)
 {
@@ -109,13 +117,14 @@
   ver <- desc[1, "Version"]
 
   if (interactive())
-    {
-      packageStartupMessage(paste("\n ____  _____ _____ _   ____  \n| __ )| ____|_   _| |_|  _ \\      Calculate Shannon Entropy and\n|  _ \\|  _|   | | | __| |_) |     Provide Optimisation Functions\n| |_) | |___  | | | |_|  _ <      Version:", ver,"\n|____/|_____| |_|  \\__|_| \\_\\ \t\n\n\nType", sQuote("?BETtR"), "to see a brief guide on how to use this R-Package."))
-    }
+  {
+    packageStartupMessage(paste("\n ____  _____ _____ _   ____  \n| __ )| ____|_   _| |_|  _ \\      Analyse and Forecast\n|  _ \\|  _|   | | | __| |_) |     Sports Betting Data\n| |_) | |___  | | | |_|  _ <      Version:", ver,"\n|____/|_____| |_|  \\__|_| \\_\\ \t\n\n\nType", sQuote("?bettr"), "to see a brief guide on how to use this R-Package.\nType",sQuote("BETtR_news()"), "to see new features, recent changes and bug fixes."
+    ))
+  }
   else
-    {
-      packageStartupMessage(
+  {
+    packageStartupMessage(
       paste("Package", sQuote(pkg),"version", ver))
-    }
+  }
 }
 

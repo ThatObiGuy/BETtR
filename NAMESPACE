@@ -2,6 +2,7 @@
 
 S3method(plot,bettr_data)
 S3method(predict,bettr_data)
+export(BETtR_news)
 export(arima_model)
 export(ets_model)
 export(make_bettr)

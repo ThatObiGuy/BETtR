@@ -54,7 +54,7 @@ The following features are planned for future versions:
 * **Enhanced prediction models**: Investigate additional forecasting approaches
   - Machine learning models (e.g., random forests, gradient boosting)
   - Ensemble methods combining multiple model predictions
-  
+
 * **Extended plotting functionality**: Add `odd` argument options
   - `"winner"`: Track odds for the ultimate match winner
   - `"all"`: Display all three outcomes (home/draw/away) simultaneously
@@ -62,5 +62,5 @@ The following features are planned for future versions:
 
 * **Performance improvements**: Optimise internal functions for larger datasets
 
-Bug reports and feature requests can be submitted at: 
+Bug reports and feature requests can be submitted at:
 <https://github.com/ThatObiGuy/bettr/issues>
