@@ -123,7 +123,7 @@ predict(
   odds  = "away_odds",
   h     = 24,
   model = "skellam",
-  M     = 500,
+  sims     = 500,
   tickSize = 0.01
 )
 ```

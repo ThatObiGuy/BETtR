@@ -26,5 +26,5 @@ Apply a list of models to a dataset featuring betting odds
 \examples{
 data <- subset(football, home_team == "Sunderland")
 data <- make_bettr(data)
-predict(data, odds = "home_odds", h = 24, model = "all", M = 1000, tickSize = 0.01)
+predict(data, odds = "home_odds", h = 24, model = "all", sims = 1000, tickSize = 0.01)
 }

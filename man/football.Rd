@@ -31,6 +31,6 @@ draw odds along with maximum allowable bet amounts in euros.
 }
 \examples{
 data(football, package="bettr")
-pairs(football[,-(1:2)], col=football$home_team)
+pairs(football[,-(1:5)])
 }
 \keyword{datasets}

@@ -4,7 +4,7 @@
 \alias{arima_model}
 \title{Arima model forecasting future betting odds}
 \usage{
-arima_model(object, odds_vec, h = 36)
+arima_model(object, odds_vec, h = 36, has_na = FALSE)
 }
 \arguments{
 \item{object}{Object on which \code{arima_model} is performed on.}
@@ -12,6 +12,8 @@ arima_model(object, odds_vec, h = 36)
 \item{odds_vec}{A vector of odds.}
 
 \item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+
+\item{has_na}{True if NA values are present in \code{object} and \code{odds_vec}. False by default.}
 }
 \value{
 A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
@@ -22,5 +24,5 @@ Arima model forecasting future betting odds
 \examples{
 match <- subset(football, football$home_team == "Brentford")
 match <- tsibble::fill_gaps(make_bettr(match))
-arima_model(match, match$away_odds, h = 48)
+arima_model(match, match$away_odds, h = 48, has_na = TRUE)
 }

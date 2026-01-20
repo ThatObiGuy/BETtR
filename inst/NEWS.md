@@ -23,7 +23,7 @@ The package provides tools for structuring, visualising, and forecasting betting
 * `predict.bettr_data()`: Time-series forecasting of betting odds
   - Three modelling approaches: ARIMA, ETS (exponential smoothing), and Skellam-based models
   - Automatic gap detection and interpolation for time series data
-  - Flexible forecast horizons (default 36 hours)
+  - Flexible forecast horizons
   - Option to fit individual models or all models simultaneously
 
 #### Data

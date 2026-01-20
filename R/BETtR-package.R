@@ -43,7 +43,7 @@
 #' data(football)
 #'
 #' # Inspect the dataset
-#' football
+#' head(football)
 #'
 #' # Convert data to bettr_data explicitly
 #' x_ts <- make_bettr(football, make_tsibble = TRUE)
@@ -68,6 +68,7 @@
 #'
 #' # Apply prediction method to football example dataset
 #' football_match <- subset(football, home_team == "Everton")
+#' football_match <-make_bettr(football_match, make_tsibble = TRUE)
 #' predict(football_match, odds = "away_odds", h = 67, model = "skellam")
 #'
 #'
@@ -93,7 +94,7 @@
 #' plot(example_bettr)
 #'
 #' # Predict synthetic example
-#' predict(example_bettr, odds = "home_odds", h = 67, model = "all", M = 2500, tickSize = 0.01)
+#' predict(example_bettr, odds = "home_odds", h = 67, model = "all", sims = 2500, tickSize = 0.01)
 #'
 #' @docType package
 #' @keywords package

@@ -4,7 +4,7 @@
 \alias{ets_model}
 \title{ETS model forecasting future betting odds}
 \usage{
-ets_model(object, odds_vec, h = 36)
+ets_model(object, odds_vec, h = 36, has_na = FALSE)
 }
 \arguments{
 \item{object}{Object on which \code{ets_model} is performed on.}
@@ -12,6 +12,8 @@ ets_model(object, odds_vec, h = 36)
 \item{odds_vec}{A vector of odds.}
 
 \item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+
+\item{has_na}{True if NA values are present in \code{object} and \code{odds_vec}. False by default.}
 }
 \value{
 A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
@@ -21,6 +23,6 @@ ETS model forecasting future betting odds
 }
 \examples{
 match <- subset(football, football$home_team == "Crystal Palace")
-match <- make_bettr(match) \%>\% fill_gaps()
-ets_model(match, match$draw_odds, h = 72)
+match <- tsibble::fill_gaps(make_bettr(match))
+ets_model(match, match$draw_odds, h = 72, has_na = TRUE)
 }

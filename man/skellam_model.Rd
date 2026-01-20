@@ -4,7 +4,7 @@
 \alias{skellam_model}
 \title{Skellam model forecasting future betting odds}
 \usage{
-skellam_model(object, odds_vec, h = 36, tickSize = 0.01, M = 2000)
+skellam_model(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000)
 }
 \arguments{
 \item{object}{Object on which \code{skellam_model} is performed on.}
@@ -15,7 +15,7 @@ skellam_model(object, odds_vec, h = 36, tickSize = 0.01, M = 2000)
 
 \item{tickSize}{The minimum change in odds. Defaults to 0.01}
 
-\item{M}{The number of simulations}
+\item{sims}{The number of simulations}
 }
 \value{
 A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
@@ -25,6 +25,6 @@ Skellam model forecasting future betting odds
 }
 \examples{
 match <- subset(football, football$home_team == "Aston Villa")
-match <- make_bettr(match) \%>\% fill_gaps()
+match <- tsibble::fill_gaps(make_bettr(match))
 ets_model(match, match$draw_odds, h = 18)
 }

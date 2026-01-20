@@ -18,7 +18,7 @@
 #' }
 #' @examples
 #' data(football, package="bettr")
-#' pairs(football[,-(1:2)], col=football$home_team)
+#' pairs(football[,-(1:5)])
 #' @docType data
 #' @keywords datasets
 #' @usage data(football)
