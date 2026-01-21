@@ -4,7 +4,7 @@ BETtR. An R package for structuring, visualising, and exploring betting market o
 
 ## Overview
 
-BETtR provides tools for working with betting odds data observed over time. It introduces a custom S3 class, `bettr_data`, built on top of `tsibble`, and includes methods for visualisation and exploratory prediction using multiple time-series models.
+BETtR is an R package for analysing sports betting odds data over time. It allows users to organise odds data, visualise how markets evolve before an event, and explore time-series–based forecasting methods for odds movements.
 
 ## Installation
 
