@@ -2,27 +2,34 @@
 % Please edit documentation in R/predict.bettr_data.R
 \name{arima_model}
 \alias{arima_model}
-\title{Arima model forecasting future betting odds}
+\title{Arima-based betting odds forecasting}
 \usage{
 arima_model(object, odds_vec, h = 36, has_na = FALSE)
 }
 \arguments{
-\item{object}{Object on which \code{arima_model} is performed on.}
+\item{object}{An object of class \code{bettr_data}.}
 
-\item{odds_vec}{A vector of odds.}
+\item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+\item{h}{The number of hours to be forecast. 36 hours by default..}
 
-\item{has_na}{True if NA values are present in \code{object} and \code{odds_vec}. False by default.}
+\item{has_na}{Should be true if there are NA values present in \code{object} and/or \code{odds_vec}. Note
+that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist and deals
+with that accordingly. False by default.}
 }
 \value{
-A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
+A list featuring the forecasted values, a forecast plot and forecasted values.
 }
 \description{
-Arima model forecasting future betting odds
+Creates an Arima model given an object of class "\code{bettr_data}" and a vector of associated odds.
+Gives the model specification, the predicted values and a plot of the predicted and forecasted
+odds over time, similarly to \code{\link{ets_model}} and \code{\link{skellam_model}}
 }
 \examples{
 match <- subset(football, football$home_team == "Brentford")
 match <- tsibble::fill_gaps(make_bettr(match))
 arima_model(match, match$away_odds, h = 48, has_na = TRUE)
+}
+\author{
+Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>
 }

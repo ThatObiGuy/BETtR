@@ -2,27 +2,34 @@
 % Please edit documentation in R/predict.bettr_data.R
 \name{ets_model}
 \alias{ets_model}
-\title{ETS model forecasting future betting odds}
+\title{ETS-based betting odds forecasting}
 \usage{
 ets_model(object, odds_vec, h = 36, has_na = FALSE)
 }
 \arguments{
-\item{object}{Object on which \code{ets_model} is performed on.}
+\item{object}{An object of class \code{bettr_data}.}
 
-\item{odds_vec}{A vector of odds.}
+\item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+\item{h}{The number of hours to be forecast. 36 hours by default.}
 
-\item{has_na}{True if NA values are present in \code{object} and \code{odds_vec}. False by default.}
+\item{has_na}{True if there are NA values present in \code{object} and/or \code{odds_vec}. Note
+that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist in the two and deals
+with that accordingly. False by default.}
 }
 \value{
-A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
+A list featuring the forecasted values, a forecast plot and forecasted values.
 }
 \description{
-ETS model forecasting future betting odds
+Creates an ETS model given an object of class "\code{bettr_data}" and a vector of associated odds.
+Gives the model specification, the predicted values and a plot of the predicted and forecasted
+odds over time, similarly to \code{\link{arima_model}} and \code{\link{skellam_model}}
 }
 \examples{
 match <- subset(football, football$home_team == "Crystal Palace")
 match <- tsibble::fill_gaps(make_bettr(match))
 ets_model(match, match$draw_odds, h = 72, has_na = TRUE)
+}
+\author{
+Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>
 }

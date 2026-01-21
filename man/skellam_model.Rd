@@ -2,29 +2,34 @@
 % Please edit documentation in R/predict.bettr_data.R
 \name{skellam_model}
 \alias{skellam_model}
-\title{Skellam model forecasting future betting odds}
+\title{Skellam based betting odds forecasting}
 \usage{
 skellam_model(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000)
 }
 \arguments{
-\item{object}{Object on which \code{skellam_model} is performed on.}
+\item{object}{An object of class \code{bettr_data} on which \code{skellam_model} is performed on.}
 
-\item{odds_vec}{A vector of odds.}
+\item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+\item{h}{The number of hours to be forecast. 36 hours by default.}
 
-\item{tickSize}{The minimum change in odds. Defaults to 0.01}
+\item{tickSize}{The minimum possible change in odds. 0.01 by default.}
 
-\item{sims}{The number of simulations}
+\item{sims}{The number of simulations. 2000 by default.}
 }
 \value{
-A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
+A list featuring the forecasted values, a forecast plot and forecasted values.
 }
 \description{
-Skellam model forecasting future betting odds
+Creates a Skellam model given an object of class "\code{bettr_data}" and a vector of associated odds.
+Gives the model specification, the predicted values and a plot of the predicted and forecasted
+odds over time, similarly to \code{\link{arima_model}} and \code{\link{ets_model}}
 }
 \examples{
 match <- subset(football, football$home_team == "Aston Villa")
 match <- tsibble::fill_gaps(make_bettr(match))
 ets_model(match, match$draw_odds, h = 18)
+}
+\author{
+Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>
 }

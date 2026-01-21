@@ -1,31 +1,39 @@
 #' Apply a list of models to a dataset featuring betting odds
 #'
-#' @param object The object on which the Skellam, Arima and ETS models may be applied.
-#' @param odds A string which is the name of the column the user wishes to investigate.
-#' @param h The number of hours to be forecast. Defaults to 36 hours.
-#' @param model Which models are to be applied to the data. Defaults to "all".
+#' A wrapper function for \code{\link{arima_model}}, \code{\link{ets_model}} and \code{\link{skellam_model}}
+#' with some built-in checks for univariate time series and NA value handling necessary for arima and ets.
+#'
+#' @param object An object of class \code{bettr_data}
+#' @param odds A character string which is the name of the column the user wishes to investigate.
+#' @param h The number of hours to be forecast. 36 hours by default.
+#' @param model Models to be applied to the data. Defaults to "all".
+#' @param has_na Should be true if there are NA values present in \code{object} and/or
+#' if \code{object} has gaps in time data. If not specified, the function checks for gaps and
+#' NAs and passes the result of the checks to the named functions.
 #' @param ... Extra parameters to be passed to the Skellam model.
 #'
 #' @returns A list featuring the models fitted, their forecast plot and forecasted values.
 #' @export
+#' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
-#' @importFrom tsibble "fill_gaps" "scan_gaps"
+#' @importFrom tsibble "fill_gaps" "has_gaps"
 #' @importFrom ggplot2 "ggplot"
 #' @importFrom utils "tail"
 #' @importFrom magrittr "%<>%"
-#' @importFrom dplyr "count"
 #'
 #' @examples
 #' data <- subset(football, home_team == "Sunderland")
 #' data <- make_bettr(data)
 #' predict(data, odds = "home_odds", h = 24, model = "all", sims = 1000, tickSize = 0.01)
-predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam", "arima", "ets"), ...) {
+predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam", "arima", "ets"), has_na = NULL, ...) {
   if(!inherits(object, "bettr_data"))
     stop("Calling predict.bettr_data on a non-bettr object")
 
   model <- match.arg(model)
-  if(model != "skellam"){ # We only care about NAs for arima and ets
-    has_na <- ifelse(any(is.na(object)) || dplyr::count(tsibble::scan_gaps(object)) > 0, TRUE, FALSE)
+  if(model != "skellam" && is.null(has_na)){ # We only care about NAs for arima and ets
+    has_na <- ifelse(any(is.na(object)) || tsibble::has_gaps(object)$.gaps, TRUE, FALSE)
+  }else{
+    has_na = FALSE
   }
   switch (model,
         "skellam" = {
@@ -85,15 +93,23 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
 }
 
 
-#' Arima model forecasting future betting odds
+#' Arima-based betting odds forecasting
 #'
-#' @param object Object on which \code{arima_model} is performed on.
-#' @param odds_vec A vector of odds.
-#' @param h The number of hours to be forecast. Defaults to 36 hours.
-#' @param has_na True if NA values are present in \code{object} and \code{odds_vec}. False by default.
+#' Creates an Arima model given an object of class "\code{bettr_data}" and a vector of associated odds.
+#' Gives the model specification, the predicted values and a plot of the predicted and forecasted
+#' odds over time, similarly to \code{\link{ets_model}} and \code{\link{skellam_model}}
 #'
-#' @returns A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
+#' @param object An object of class \code{bettr_data}.
+#' @param odds_vec A numeric vector of odds.
+#' @param h The number of hours to be forecast. 36 hours by default..
+#' @param has_na Should be true if there are NA values present in \code{object} and/or \code{odds_vec}. Note
+#' that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist and deals
+#' with that accordingly. False by default.
+#'
+#' @returns A list featuring the forecasted values, a forecast plot and forecasted values.
+#'
 #' @export
+#' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
 #' @importFrom fabletools "forecast" "model"
 #' @importFrom lubridate "hours"
@@ -131,15 +147,24 @@ arima_model <- function(object, odds_vec, h = 36, has_na = FALSE){
   )
 }
 
-#' ETS model forecasting future betting odds
+
+#' ETS-based betting odds forecasting
 #'
-#' @param object Object on which \code{ets_model} is performed on.
-#' @param odds_vec A vector of odds.
-#' @param h The number of hours to be forecast. Defaults to 36 hours.
-#' @param has_na True if NA values are present in \code{object} and \code{odds_vec}. False by default.
+#' Creates an ETS model given an object of class "\code{bettr_data}" and a vector of associated odds.
+#' Gives the model specification, the predicted values and a plot of the predicted and forecasted
+#' odds over time, similarly to \code{\link{arima_model}} and \code{\link{skellam_model}}
 #'
-#' @returns A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
+#' @param object An object of class \code{bettr_data}.
+#' @param odds_vec A numeric vector of odds.
+#' @param h The number of hours to be forecast. 36 hours by default.
+#' @param has_na True if there are NA values present in \code{object} and/or \code{odds_vec}. Note
+#' that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist in the two and deals
+#' with that accordingly. False by default.
+#'
+#' @returns A list featuring the forecasted values, a forecast plot and forecasted values.
+#'
 #' @export
+#' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
 #' @importFrom fabletools "forecast" "model"
 #' @importFrom lubridate "hours"
@@ -175,16 +200,22 @@ ets_model <- function(object, odds_vec, h = 36, has_na = FALSE) {
     model = ets_fit
   )
 }
-#' Skellam model forecasting future betting odds
+#' Skellam based betting odds forecasting
 #'
-#' @param object Object on which \code{skellam_model} is performed on.
-#' @param odds_vec A vector of odds.
-#' @param h The number of hours to be forecast. Defaults to 36 hours.
-#' @param tickSize The minimum change in odds. Defaults to 0.01
-#' @param sims The number of simulations
+#' Creates a Skellam model given an object of class "\code{bettr_data}" and a vector of associated odds.
+#' Gives the model specification, the predicted values and a plot of the predicted and forecasted
+#' odds over time, similarly to \code{\link{arima_model}} and \code{\link{ets_model}}
 #'
-#' @returns A list featuring the forecasted values, the plot of the odds with respect to time and the model that was fitted
+#' @param object An object of class \code{bettr_data} on which \code{skellam_model} is performed on.
+#' @param odds_vec A numeric vector of odds.
+#' @param h The number of hours to be forecast. 36 hours by default.
+#' @param tickSize The minimum possible change in odds. 0.01 by default.
+#' @param sims The number of simulations. 2000 by default.
+#'
+#' @returns A list featuring the forecasted values, a forecast plot and forecasted values.
+#'
 #' @export
+#' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
 #' @importFrom skellam "rskellam"
 #' @importFrom stats "quantile" "na.omit"
