@@ -46,29 +46,27 @@
 #' head(football)
 #'
 #' # Convert data to bettr_data explicitly
-#' x_ts <- make_bettr(football, make_tsibble = TRUE)
-#' x_df <- make_bettr(football, make_tsibble = FALSE)
+#' x <- make_bettr(football)
 #'
 #' # Check resulting classes
-#' class(x_ts)
-#' class(x_df)
+#' class(x)
 #'
 #' # Plot odds movements for opening favourites
-#' plot(x_df, odd = "OF")
+#' plot(x, odd = "OF")
 #'
 #' # Plot odds movements for closing favourites
-#' plot(x_df, odd = "CF")
+#' plot(x, odd = "CF")
 #'
 #'
 #' # Add a fixture label for interactive tooltips
-#' football2 <- x_df |>
+#' football2 <- x |>
 #'   dplyr::mutate(fixture = paste(home_team, "vs", away_team))
 #'
 #' plot(football2, fixture = "fixture")
 #'
 #' # Apply prediction method to football example dataset
 #' football_match <- subset(football, home_team == "Everton")
-#' football_match <-make_bettr(football_match, make_tsibble = TRUE)
+#' football_match <-make_bettr(football_match)
 #' predict(football_match, odds = "away_odds", h = 5, model = "skellam")
 #'
 #'
