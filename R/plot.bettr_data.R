@@ -51,6 +51,9 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
     }
   }
 
+  # dropping tsibble
+  x <- as.data.frame(x)
+
   # We require an object containing opening odds
   x |>
     genzplyr::squad_up(event_id) |>
