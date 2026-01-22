@@ -33,7 +33,7 @@ vignette("BETtR", package="bettr")
 
 ### Convert raw odds data into a bettr_data object
 ```r
-bettr_obj <- make_bettr(raw_odds_data, make_tsibble = TRUE)
+bettr_obj <- make_bettr(raw_odds_data)
 ```
 
 ### Visualise odds movement

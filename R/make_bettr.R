@@ -7,8 +7,7 @@
 #' Counts rows with missing values with a warning message and can optionally
 #' remove those rows if the logical argument \code{drop_NA_values = TRUE}.
 #' Additionally it converts \code{data} into a \code{tsibble} ready for time
-#' series analysis, or it can be left as the original dataframe by setting
-#' \code{make_tsibble = FALSE}.
+#' series analysis.
 #'
 #'
 #' @param data An object containing betting data
@@ -29,14 +28,12 @@
 #' @param draw_odds A string of the name of the column containing draw odds in
 #' \code{data}. For example \code{draw_odds = "name of column with draw_odds"}.
 #' The default being \code{draw_odds = "draw_odds"}.
-#' @param make_tsibble A logical argument that converts the object to a type
-#' tsibble, argument is set to \code{make_tsibble = TRUE} by default.
 #' @param drop_NA_values A logical argument that drops any rows with NA values,
 #' argument is set to \code{drop_NA_values = FALSE} by default.
 #' @param ... additional arguments passed to  \code{as_tsibble()}
 #'
 #' @returns returns an object of class \code{bettr_data}. Also adds class
-#' \code{tbl_ts}, \code{tbl_df} and \code{tbl} if \code{make_tsibble = TRUE}.
+#' \code{tbl_ts}, \code{tbl_df} and \code{tbl}
 #'
 #' @note The columns (home_odds, away_odds, draw_odds) must be numeric.
 #'  The column logged_time must be of class POSIXct. If converting to a
@@ -58,9 +55,8 @@
 #' # Example with package dataset
 #' data(football)
 #'
-#' x <- make_bettr(football, make_tsibble = TRUE)
+#' x <- make_bettr(football)
 #'
-#' x2 <- make_bettr(football, make_tsibble = FALSE)
 #'
 #' #example with generated dataset that contains NAs and custom column names
 #' generatedExample <- data.frame(idOfEvent = 1:3,
@@ -86,7 +82,7 @@ make_bettr <- function(data,
                        logged_time = "logged_time",
                        home_odds = "home_odds",
                        away_odds = "away_odds",
-                       draw_odds = "draw_odds", make_tsibble = TRUE,
+                       draw_odds = "draw_odds",
                        drop_NA_values = FALSE, ...) {
 
 
@@ -144,15 +140,14 @@ make_bettr <- function(data,
   data[[event_id]] <- factor(data[[event_id]],# factors ids and rids duplicates
                              levels = unique(data[[event_id]]))
 
-  if (make_tsibble)
-  {
-    if (anyNA(data[[logged_time]])) {
-      stop("\nLogged time column has missing values (NAs).",
-      "\nThey need to be removed by setting drop_NA_values to TRUE."
-      , "\nCannot create a tsibble if there's missing values in logged_time.")
+
+  if (anyNA(data[[logged_time]])) {
+    stop("\nLogged time column has missing values (NAs).",
+         "\nThey need to be removed by setting drop_NA_values to TRUE."
+         , "\nCannot create a tsibble if there's missing values in logged_time.")
     }
-    data <- tsibble::as_tsibble(data, key = event_id, index = logged_time, ...)
-  }
+  data <- tsibble::as_tsibble(data, key = event_id, index = logged_time, ...)
+
   class(data) <- unique(c("bettr_data", class(data))) # unique to not have 2 bettr objs
   return(data)
 }

@@ -28,7 +28,7 @@
 #' @seealso \code{\link{make_bettr}}, \code{\link{predict.bettr_data}}
 #'
 #' @examples
-#' football <- make_bettr(football, make_tsibble = FALSE)
+#' football <- make_bettr(football)
 #' plot(football)
 #' plot(football, odd = "CF", width_svg = 8)
 #'

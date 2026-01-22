@@ -11,7 +11,6 @@ make_bettr(
   home_odds = "home_odds",
   away_odds = "away_odds",
   draw_odds = "draw_odds",
-  make_tsibble = TRUE,
   drop_NA_values = FALSE,
   ...
 )
@@ -41,9 +40,6 @@ The default being \code{away_odds = "away_odds"}.}
 \code{data}. For example \code{draw_odds = "name of column with draw_odds"}.
 The default being \code{draw_odds = "draw_odds"}.}
 
-\item{make_tsibble}{A logical argument that converts the object to a type
-tsibble, argument is set to \code{make_tsibble = TRUE} by default.}
-
 \item{drop_NA_values}{A logical argument that drops any rows with NA values,
 argument is set to \code{drop_NA_values = FALSE} by default.}
 
@@ -51,7 +47,7 @@ argument is set to \code{drop_NA_values = FALSE} by default.}
 }
 \value{
 returns an object of class \code{bettr_data}. Also adds class
-\code{tbl_ts}, \code{tbl_df} and \code{tbl} if \code{make_tsibble = TRUE}.
+\code{tbl_ts}, \code{tbl_df} and \code{tbl}
 }
 \description{
 make_bettr makes a betting dataset ready for analysis by checking for the
@@ -61,8 +57,7 @@ Make_bettr checks that the odds (home, away, draw) columns are numeric.
 Counts rows with missing values with a warning message and can optionally
 remove those rows if the logical argument \code{drop_NA_values = TRUE}.
 Additionally it converts \code{data} into a \code{tsibble} ready for time
-series analysis, or it can be left as the original dataframe by setting
-\code{make_tsibble = FALSE}.
+series analysis.
 }
 \note{
 The columns (home_odds, away_odds, draw_odds) must be numeric.
@@ -78,9 +73,8 @@ The columns (home_odds, away_odds, draw_odds) must be numeric.
 # Example with package dataset
 data(football)
 
-x <- make_bettr(football, make_tsibble = TRUE)
+x <- make_bettr(football)
 
-x2 <- make_bettr(football, make_tsibble = FALSE)
 
 #example with generated dataset that contains NAs and custom column names
 generatedExample <- data.frame(idOfEvent = 1:3,

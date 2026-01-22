@@ -30,7 +30,7 @@ with interactive tooltips, falling back to static \code{\link[ggplot2]{ggplot}}
 if interactive plotting fails.
 }
 \examples{
-football <- make_bettr(football, make_tsibble = FALSE)
+football <- make_bettr(football)
 plot(football)
 plot(football, odd = "CF", width_svg = 8)
 
