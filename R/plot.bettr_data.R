@@ -44,9 +44,6 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
   # Checking the given argument for the odd parameter is valid
   odd <- match.arg(odd)
 
-  # Fixing compatability with tsibble bettr_data
-  x <- dplyr::as_tibble(x)
-
   # Validate fixture column if provided
   if (!is.null(fixture)) {
     if (!fixture %in% names(x)) {

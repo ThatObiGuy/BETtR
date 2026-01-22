@@ -1,4 +1,4 @@
-# BETtR <img src="https://raw.githubusercontent.com/ThatObiGuy/BETtR/refs/heads/main/tempLogo.png" align="right" width=120 height=139 alt="" />
+# BETtR <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 BETtR. An R package for structuring, visualising, and exploring betting market odds data.
 

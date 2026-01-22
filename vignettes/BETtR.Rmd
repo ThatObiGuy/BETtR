@@ -12,7 +12,7 @@ vignette: >
 htmltools::tags$div(
   style = "text-align: center; margin-bottom: 1em;",
   htmltools::tags$img(
-    src = "tempLogo.png",
+    src = "../man/figures/logo.png",
     style = "width: 35%; border: 0; box-shadow: none; padding: 0; background: none;"
   )
 )
@@ -83,7 +83,7 @@ The input data must contain:
 * home, draw, and away odds
 
 ```{r, eval=FALSE}
-bettr_obj <- make_bettr(raw_odds_data, make_tsibble = TRUE)
+bettr_obj <- make_bettr(raw_odds_data)
 ```
 
 The return object inherits from `tsibble` and can be used with other methods provided by the package.
@@ -99,6 +99,8 @@ football_df <- make_bettr(football, make_tsibble = FALSE)
 
 plot(football_df, odd = "OF")
 ```
+
+Note that when using non-default arguments with the plot function we recommend that you ensure usage of `make_tsibble = FALSE` during the `make_bettr()` function.
 
 ### Predicting odds movement
 
