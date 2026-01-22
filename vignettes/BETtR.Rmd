@@ -12,11 +12,7 @@ vignette: >
 htmltools::tags$div(
   style = "text-align: center; margin-bottom: 1em;",
   htmltools::tags$img(
-<<<<<<< HEAD
     src = "../man/figures/logo.png",
-=======
-    src = "BETtRLogo.png",
->>>>>>> a6f7b25c59bc41fac44daa7684941e6139afc519
     style = "width: 35%; border: 0; box-shadow: none; padding: 0; background: none;"
   )
 )
@@ -89,15 +85,11 @@ The input data must contain:
 * logged time
 * home, draw, and away odds
 
-<<<<<<< HEAD
-```{r, eval=FALSE}
-bettr_obj <- make_bettr(raw_odds_data)
-=======
+
 ```{r}
 data("football")
 
 bettr_football <- make_bettr(football, make_tsibble = FALSE)
->>>>>>> a6f7b25c59bc41fac44daa7684941e6139afc519
 ```
 
 The return object inherits from `tsibble` and can be used with other methods provided by the package.
