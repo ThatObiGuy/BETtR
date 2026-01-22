@@ -12,7 +12,11 @@ vignette: >
 htmltools::tags$div(
   style = "text-align: center; margin-bottom: 1em;",
   htmltools::tags$img(
+<<<<<<< HEAD
     src = "../man/figures/logo.png",
+=======
+    src = "BETtRLogo.png",
+>>>>>>> a6f7b25c59bc41fac44daa7684941e6139afc519
     style = "width: 35%; border: 0; box-shadow: none; padding: 0; background: none;"
   )
 )
@@ -26,6 +30,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, include=FALSE}
+options(rmarkdown.html_vignette.check_title = FALSE)
 suppressPackageStartupMessages(library(bettr))
 ```
 
@@ -33,46 +38,48 @@ suppressPackageStartupMessages(library(bettr))
 
 __BETtR__ is an R package designed to work with betting market odds data, providing tools for structuring the odds data in objects, visualising how the odds evolve over time, and supporting exploratory prediction methods for betting odds trajectories.
 
-This package is built around a `bettr_data` object, which extends a \code{\link[tsibble]{tsibble}} representation of event-level odds data.
+This package is built around a `bettr_data` object, which extends a [tsibble](https://tsibble.tidyverts.org/) representation of event-level odds data.
 
-This vignette provides a brief overview of the intended workflow when using __BETtR__.
-
-For a guide on understanding sports betting odds click here.
+This vignette provides an overview of the intended workflow when using __BETtR__.
 
 ## Installing BETtR
 
 __BETtR__ is not available on CRAN and must be installed from GitHub.
 
-To install the package and ensure the vignette is available, run:
+In R you can type the following: 
 
 ```{r, eval=FALSE}
 install.packages('devtools')
-devtools::install_github('ThatObiGuy/BETtR', build_vignettes = TRUE)
+devtools::install_github('ThatObiGuy/BETtR')
 ```
 
-To install the latest development version of the package from the __BETtR__ [GitHub page](https://github.com/ThatObiGuy/BETtR).
+to install the latest development version of the package from the __BETtR__ [GitHub page](https://github.com/ThatObiGuy/BETtR).
 
 
 Once you have run the above code, load the package using:
 
-```{r}
+```{r, eval=FALSE}
 library(bettr)
 ```
 
 this will load in all the __BETtR__ functions. 
 
-If you find bugs or wish to suggest new features please visit __BETtR__ [GitHub issues page](https://github.com/ThatObiGuy/bettr/issues).
+If you find bugs or wish to suggest new features please visit __BETtR__ [GitHub issues page](https://github.com/ThatObiGuy/BETtR/issues).
 
 
-### Interpreting betting odds data
+### Brief guide on interpreting betting sports odds data
 
-In betting markets, odds can be thought of as prices placed on possible outcomes of an event. They indicate how likely an outcome is believed to be: lower odds mean an outcome is considered more likely to occur, while higher odds indicate a less likely outcome.
+In betting markets, odds can be thought of as prices placed on possible outcomes of an event. They indicate how likely an outcome is believed to be, lower odds mean an outcome is considered more likely to occur, while higher odds indicate a less likely outcome.
 
 For a typical football match, odds are quoted for three possible outcomes: a home win, a draw, or an away win. These odds are not fixed and often change over time as new information becomes available or as people place bets, leading to observable movements in the odds before the event takes place.
 
 For example, if a team is offered at odds of 2.00 and a bettor places a €10 stake on that team to win at home, a successful outcome would return €20 in total, including the original stake. If the odds later shorten to 1.80, the same €10 stake would return €18, reflecting a higher assessed likelihood of that outcome by the market.
 
-### Creating a BETtR_data object
+For a more comprehensive understanding of how sports betting odds we encourage the user to conduct their own research, however the above should be proficient for the intended use of the package.
+
+### Creating a bettr_data object
+
+The package includes an example betting odds dataset, `football`, for the purpose of being made into a `bettr_data` object. These datasets can be used to experiment with the package functionality.
 
 The base requirement to using this R package is the `make_bettr()` function. This function takes in a data frame containing betting odds and converts it into a `bettr_data` object.
 
@@ -82,8 +89,15 @@ The input data must contain:
 * logged time
 * home, draw, and away odds
 
+<<<<<<< HEAD
 ```{r, eval=FALSE}
 bettr_obj <- make_bettr(raw_odds_data)
+=======
+```{r}
+data("football")
+
+bettr_football <- make_bettr(football, make_tsibble = FALSE)
+>>>>>>> a6f7b25c59bc41fac44daa7684941e6139afc519
 ```
 
 The return object inherits from `tsibble` and can be used with other methods provided by the package.
@@ -93,11 +107,7 @@ The return object inherits from `tsibble` and can be used with other methods pro
 __BETtR__ provides a plotting method for `bettr_data` objects. The plot shows percentage changes in betting odds over time relative to their opening values, allowing movements across different events to be compared on a common scale.
 
 ```{r, fig.width=7, fig.height=4}
-data("football")
-
-football_df <- make_bettr(football, make_tsibble = FALSE)
-
-plot(football_df, odd = "OF")
+plot(bettr_football, odd = "OF")
 ```
 
 Note that when using non-default arguments with the plot function we recommend that you ensure usage of `make_tsibble = FALSE` during the `make_bettr()` function.
@@ -114,13 +124,13 @@ The prediction interface applies time–series–based models to the odds trajec
 
 The method automatically checks for gaps in the time index and applies interpolation where necessary.
 
-```{r, eval=FALSE}
+```{r, fig.width=7, fig.height=4}
 data("football")
 
 match_df <- subset(football, home_team == "Everton")
 match_ts <- make_bettr(match_df, make_tsibble = TRUE)
 
-predict(
+res <- predict(
   match_ts,
   odds  = "away_odds",
   h     = 24,
@@ -128,18 +138,16 @@ predict(
   sims     = 500,
   tickSize = 0.01
 )
+
+res$forecast_plot
 ```
 
+The plot shows how betting odds are expected to change over the selected forecast period based on recent market behaviour.
 
-### Example 'football' dataset
+* The black line shows the observed odds up to the most recent time point.
+* The blue line shows the model’s estimated average future odds.
+* The shaded area represents uncertainty in the forecast; wider bands indicate greater uncertainty.
 
-The package includes an example betting odds dataset, 'football', that has already been processed into `bettr_data` objects. These datasets can be used to experiment with the package functionality.
+Betting odds typically change in discrete steps rather than smoothly. The Skellam-based model reflects this behaviour, which is why the forecast may appear step-like.
 
-```{r, eval=FALSE}
-data("football")
-
-football_df <- make_bettr(football, make_tsibble = FALSE)
-
-plot(football_df)
-```
-
+This forecast is intended for exploratory analysis of odds movements and trends, rather than as betting advice.

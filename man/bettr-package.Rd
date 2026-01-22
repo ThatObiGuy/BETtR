@@ -47,14 +47,14 @@ class(x_ts)
 class(x_df)
 
 # Plot odds movements for opening favourites
-plot(football, odd = "OF")
+plot(x_df, odd = "OF")
 
 # Plot odds movements for closing favourites
-plot(football, odd = "CF")
+plot(x_df, odd = "CF")
 
 
 # Add a fixture label for interactive tooltips
-football2 <- football |>
+football2 <- x_df |>
   dplyr::mutate(fixture = paste(home_team, "vs", away_team))
 
 plot(football2, fixture = "fixture")
@@ -62,32 +62,8 @@ plot(football2, fixture = "fixture")
 # Apply prediction method to football example dataset
 football_match <- subset(football, home_team == "Everton")
 football_match <-make_bettr(football_match, make_tsibble = TRUE)
-predict(football_match, odds = "away_odds", h = 67, model = "skellam")
+predict(football_match, odds = "away_odds", h = 5, model = "skellam")
 
-
-# Generate a small synthetic dataset to show general use of Bettr function & methods
-generated_data <- data.frame(
-  event_id = rep(1, 5),
-  logged_time = as.POSIXct(
-    c("2024-01-01 12:00:00",
-      "2024-01-01 12:15:00",
-      "2024-01-01 12:30:00",
-      "2024-01-01 12:45:00",
-      "2024-01-01 13:00:00")
-  ),
-  home_odds = c(1.90, 1.88, 1.85, 1.87, 1.84),
-  draw_odds = c(3.40, 3.45, 3.50, 3.48, 3.55),
-  away_odds = c(4.20, 4.30, 4.35, 4.40, 4.50)
-)
-
-# Convert synthetic data to bettr_data
-example_bettr <- make_bettr(generated_data)
-
-# Plot synthetic example
-plot(example_bettr)
-
-# Predict synthetic example
-predict(example_bettr, odds = "home_odds", h = 67, model = "all", sims = 2500, tickSize = 0.01)
 
 }
 \seealso{

@@ -4,16 +4,27 @@
 \alias{predict.bettr_data}
 \title{Apply a list of models to a dataset featuring betting odds}
 \usage{
-\method{predict}{bettr_data}(object, odds, h = 36, model = c("all", "skellam", "arima", "ets"), ...)
+\method{predict}{bettr_data}(
+  object,
+  odds,
+  h = 36,
+  model = c("all", "skellam", "arima", "ets"),
+  has_na = NULL,
+  ...
+)
 }
 \arguments{
-\item{object}{The object on which the Skellam, Arima and ETS models may be applied.}
+\item{object}{An object of class \code{bettr_data}}
 
-\item{odds}{A string which is the name of the column the user wishes to investigate.}
+\item{odds}{A character string which is the name of the column the user wishes to investigate.}
 
-\item{h}{The number of hours to be forecast. Defaults to 36 hours.}
+\item{h}{The number of hours to be forecast. 36 hours by default.}
 
-\item{model}{Which models are to be applied to the data. Defaults to "all".}
+\item{model}{Models to be applied to the data. Defaults to "all".}
+
+\item{has_na}{Should be true if there are NA values present in \code{object} and/or
+if \code{object} has gaps in time data. If not specified, the function checks for gaps and
+NAs and passes the result of the checks to the named functions.}
 
 \item{...}{Extra parameters to be passed to the Skellam model.}
 }
@@ -21,10 +32,14 @@
 A list featuring the models fitted, their forecast plot and forecasted values.
 }
 \description{
-Apply a list of models to a dataset featuring betting odds
+A wrapper function for \code{\link{arima_model}}, \code{\link{ets_model}} and \code{\link{skellam_model}}
+with some built-in checks for univariate time series and NA value handling necessary for arima and ets.
 }
 \examples{
 data <- subset(football, home_team == "Sunderland")
 data <- make_bettr(data)
 predict(data, odds = "home_odds", h = 24, model = "all", sims = 1000, tickSize = 0.01)
+}
+\author{
+Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>
 }

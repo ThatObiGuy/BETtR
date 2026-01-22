@@ -92,7 +92,7 @@ make_bettr <- function(data,
 
   if (inherits(data, "bettr_data")) {
     stop("Dataset is already of class 'bettr_data'.",
-    "\n Apply make_bettr() to non bettr datasets.", call. = FALSE)
+    "\nApply make_bettr() to non bettr datasets.", call. = FALSE)
   }
 
   #checking if it has the 5 required columns to be a bettr object
@@ -115,12 +115,12 @@ make_bettr <- function(data,
    if(sum(!ok) == 1) {
     # rows is plural cant have that for 1 row
      warning("Data has ", sum(!ok), " row with NA values",
-    " ,to get rid of these NA values you can set drop_NA_values = TRUE in  make_bettr().",
+    "Get rid of these NA values by setting argument drop_NA_values = TRUE in make_bettr().",
      "\nRecommended to remove all rows with NAs for proper analysis."
              , call. = FALSE)
   } else {
     warning("Data has ", sum(!ok), " rows with NA values",
-    " ,to get rid of these NA values you can set drop_NA_values = TRUE in  make_bettr().",
+    "\nGet rid of these NA values by setting argument drop_NA_values = TRUE in make_bettr().",
     "\nRecommended to remove all rows with NAs for proper analysis."
     , call. = FALSE)
   } }
@@ -138,7 +138,7 @@ make_bettr <- function(data,
        || is.character(data[[event_id]]) || is.factor(data[[event_id]]))){
     stop("event_id must be of type character, factor or numeric")
   }
-  # arrange by ids then time and .data so we can allow event_id <- "event"
+  # arrange by ids then time
   data <- dplyr::arrange(data,
                          dplyr::across(dplyr::all_of(c(event_id, logged_time))))
   data[[event_id]] <- factor(data[[event_id]],# factors ids and rids duplicates
@@ -149,11 +149,13 @@ make_bettr <- function(data,
     if (anyNA(data[[logged_time]])) {
       stop("\nLogged time column has missing values (NAs).",
       "\nThey need to be removed by setting drop_NA_values to TRUE."
-      , " \nCannot create a tsibble if theres missing values in logged_time.")
+      , "\nCannot create a tsibble if there's missing values in logged_time.")
     }
     data <- tsibble::as_tsibble(data, key = event_id, index = logged_time, ...)
   }
   class(data) <- unique(c("bettr_data", class(data))) # unique to not have 2 bettr objs
   return(data)
 }
+
+
 

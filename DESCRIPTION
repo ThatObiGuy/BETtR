@@ -37,6 +37,7 @@ Suggests:
     htmltools,
     knitr,
     rmarkdown,
+    feasts,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
