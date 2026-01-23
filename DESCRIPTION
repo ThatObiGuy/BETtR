@@ -2,7 +2,7 @@ Type: Package
 Package: bettr
 Title: 'BETtR' functions for analysing data from odds markets
 Version: 0.1.0
-Date: 2026-01-21
+Date: 2026-01-23
 Authors@R: c(
     person(c("Owen", "Frank"), "O'Connor", , "owen.oconnor.2024@mumail.ie", role = c("aut", "cre")),
     person("Sorin", "Bivol", , "sorin.bivol.2023@mumail.ie", role = "aut"),

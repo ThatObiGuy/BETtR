@@ -13,7 +13,7 @@ BETtR is an R package for structuring and visualising betting market odds data. 
 \item{Type: }{Package}
 \item{Package: }{\pkg{BETtR}}
 \item{Version: }{0.1.0}
-\item{Date: }{2025-12-28 }
+\item{Date: }{2026-01-23}
 \item{Licence: }{GPL (>= 3)}
 }
 }
