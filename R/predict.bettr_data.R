@@ -17,9 +17,6 @@
 #' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
 #' @importFrom tsibble "fill_gaps" "has_gaps"
-#' @importFrom ggplot2 "ggplot"
-#' @importFrom utils "tail"
-#' @importFrom magrittr "%<>%"
 #'
 #' @examples
 #' data <- subset(football, home_team == "Sunderland")
@@ -45,7 +42,7 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
         "arima" = {
           if(has_na){
             warning("NA values detected.\n NA values result in interpolated models")
-            object %<>% tsibble::fill_gaps()
+            object <- tsibble::fill_gaps(object)
             odds_vec <- object[[odds]]
             arima <- arima_model(object = object, odds_vec = odds_vec, h = h, has_na = has_na)
           }else{
@@ -58,7 +55,7 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
         "ets" = {
           if(has_na){
             warning("NA values detected.\n NA values result in interpolated models")
-            object %<>% tsibble::fill_gaps()
+            object <- tsibble::fill_gaps(object)
             odds_vec <- object[[odds]]
             ets <- ets_model(object = object, odds_vec = odds_vec, h = h, has_na = has_na)
           }else{
@@ -73,7 +70,7 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
             warning("NA values detected.\n NA values result in interpolated models")
             odds_vec <- object[[odds]]
             skellam <- skellam_model(object = object, odds_vec = odds_vec, h = h, ...)
-            object %<>% tsibble::fill_gaps()
+            object <- tsibble::fill_gaps(object)
             odds_vec <- object[[odds]]
             arima <- arima_model(object = object, odds_vec = odds_vec, h = h, has_na = has_na)
             ets <- ets_model(object = object, odds_vec = odds_vec, h = h, has_na = has_na)
@@ -113,7 +110,6 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
 #'
 #' @importFrom fabletools "forecast" "model"
 #' @importFrom lubridate "hours"
-#' @importFrom stats "na.omit"
 #' @importFrom fable "ARIMA"
 #' @importFrom ggplot2 "ggplot" "geom_line" "geom_ribbon" "labs" "aes" "theme_bw"
 #'
@@ -135,7 +131,7 @@ arima_model <- function(object, odds_vec, h = 36, has_na = FALSE){
   arima_forecast_plot <- ggplot2::ggplot(object) +
     ggplot2::geom_line(ggplot2::aes(x = logged_time, y = new_odds)) +
     ggplot2::geom_line(data = arima_forecast, ggplot2::aes(x = logged_time, y = .mean), colour = "blue") +
-    ggplot2::geom_ribbon(data = arima_forecast, ggplot2::aes(x = logged_time, ymin = apply(cbind(.mean), 2, quantile, 0.025, na.rm = TRUE), ymax = apply(cbind(.mean), 2, quantile, 0.975, na.rm = TRUE)), alpha = 0.2) +
+    ggplot2::geom_ribbon(data = arima_forecast, ggplot2::aes(x = logged_time, ymin = apply(cbind(.mean), 2, stats::quantile, 0.025, na.rm = TRUE), ymax = apply(cbind(.mean), 2, stats::quantile, 0.975, na.rm = TRUE)), alpha = 0.2) +
     ggplot2::labs(title = "ARIMA Forecast", y = "Odds", x = "Time") +
     ggplot2::theme_bw()
 
@@ -168,7 +164,6 @@ arima_model <- function(object, odds_vec, h = 36, has_na = FALSE){
 #'
 #' @importFrom fabletools "forecast" "model"
 #' @importFrom lubridate "hours"
-#' @importFrom stats "approx" "na.omit"
 #' @importFrom fable "ETS"
 #' @importFrom ggplot2 "ggplot" "geom_line" "geom_ribbon" "labs" "aes" "theme_bw"
 #'
@@ -190,7 +185,7 @@ ets_model <- function(object, odds_vec, h = 36, has_na = FALSE) {
   ets_forecast_plot <- ggplot2::ggplot(object) +
     ggplot2::geom_line(ggplot2::aes(x = logged_time, y = new_odds)) +
     ggplot2::geom_line(data = ets_forecast, ggplot2::aes(x = logged_time, y = .mean), colour = "blue") +
-    ggplot2::geom_ribbon(data = ets_forecast, ggplot2::aes(x = logged_time, ymin = apply(cbind(.mean), 2, quantile, 0.025, na.rm = TRUE), ymax = apply(cbind(.mean), 2, quantile, 0.975, na.rm = TRUE)), alpha = 0.2) +
+    ggplot2::geom_ribbon(data = ets_forecast, ggplot2::aes(x = logged_time, ymin = apply(cbind(.mean), 2, stats::quantile, 0.025, na.rm = TRUE), ymax = apply(cbind(.mean), 2, stats::quantile, 0.975, na.rm = TRUE)), alpha = 0.2) +
     ggplot2::labs(title = "ETS Forecast", y = "Odds", x = "Time") +
     ggplot2::theme_bw()
 
@@ -218,9 +213,7 @@ ets_model <- function(object, odds_vec, h = 36, has_na = FALSE) {
 #' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
 #' @importFrom skellam "rskellam"
-#' @importFrom stats "quantile" "na.omit"
 #' @importFrom ggplot2 "ggplot" "geom_line" "geom_ribbon" "labs" "aes" "theme_bw"
-#' @importFrom magrittr "%<>%"
 #'
 #' @examples
 #' match <- subset(football, football$home_team == "Aston Villa")
@@ -228,8 +221,8 @@ ets_model <- function(object, odds_vec, h = 36, has_na = FALSE) {
 #' ets_model(match, match$draw_odds, h = 18)
 skellam_model <- function(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000) {
   if(any(is.na(object)) || any(is.na(odds_vec))){
-    object %<>% na.omit()
-    odds_vec %<>% na.omit()
+    object <- stats::na.omit(object)
+    odds_vec <- stats::na.omit(odds_vec)
   }
 
   ticks <- round(odds_vec/tickSize)
@@ -248,14 +241,14 @@ skellam_model <- function(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000
   )
   sims_cum_ticks <- t(apply(sims_net, 1, cumsum))
 
-  last_odds <- tail(odds_vec[!is.na(odds_vec)], 1)
+  last_odds <- utils::tail(odds_vec[!is.na(odds_vec)], 1)
   sims_odds <- sweep(sims_cum_ticks * tickSize, 2, last_odds, "+")
 
   forecast <- data.frame(
     horizon = 1:h,
     mean = colMeans(sims_odds),
-    lower = apply(sims_odds, 2, quantile, 0.025, na.rm = TRUE),
-    upper = apply(sims_odds, 2, quantile, 0.975, na.rm = TRUE)
+    lower = apply(sims_odds, 2, stats::quantile, 0.025, na.rm = TRUE),
+    upper = apply(sims_odds, 2, stats::quantile, 0.975, na.rm = TRUE)
   )
 
   start_time <- max(object$logged_time)

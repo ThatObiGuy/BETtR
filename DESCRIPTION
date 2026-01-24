@@ -30,7 +30,6 @@ Imports:
     ggiraph,
     ggplot2,
     lubridate,
-    magrittr,
     skellam,
     tsibble
 Suggests: 
