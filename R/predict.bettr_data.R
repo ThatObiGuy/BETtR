@@ -5,8 +5,8 @@
 #'
 #' @param object An object of class \code{bettr_data}
 #' @param odds A character string which is the name of the column the user wishes to investigate.
-#' @param h The number of hours to be forecast. 36 hours by default.
-#' @param model Models to be applied to the data. Defaults to "all".
+#' @param h The number of hours to be forecast.
+#' @param model Models to be applied to the data.
 #' @param has_na Should be true if there are NA values present in \code{object} and/or
 #' if \code{object} has gaps in time data. If not specified, the function checks for gaps and
 #' NAs and passes the result of the checks to the named functions.
@@ -18,11 +18,19 @@
 #'
 #' @importFrom tsibble "fill_gaps" "has_gaps"
 #'
+#' @usage predict(object,
+#'        odds,
+#'        h = 36,
+#'        model = c("all", "arima", "ets", "skellam"),
+#'        has_na = NULL,
+#'        ...
+#' )
+#'
 #' @examples
 #' data <- subset(football, home_team == "Sunderland")
 #' data <- make_bettr(data)
 #' predict(data, odds = "home_odds", h = 24, model = "all", sims = 1000, tickSize = 0.01)
-predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam", "arima", "ets"), has_na = NULL, ...) {
+predict.bettr_data <- function(object, odds, h = 36, model = c("all", "arima", "ets", "skellam"), has_na = NULL, ...) {
   if(!inherits(object, "bettr_data"))
     stop("Calling predict.bettr_data on a non-bettr object")
 
@@ -90,7 +98,7 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
 }
 
 
-#' Arima-based betting odds forecasting
+#' Arima based betting odds forecasting
 #'
 #' Creates an Arima model given an object of class "\code{bettr_data}" and a vector of associated odds.
 #' Gives the model specification, the predicted values and a plot of the predicted and forecasted
@@ -98,12 +106,19 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
 #'
 #' @param object An object of class \code{bettr_data}.
 #' @param odds_vec A numeric vector of odds.
-#' @param h The number of hours to be forecast. 36 hours by default..
+#' @param h The number of hours to be forecast.
 #' @param has_na Should be true if there are NA values present in \code{object} and/or \code{odds_vec}. Note
 #' that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist and deals
-#' with that accordingly. False by default.
+#' with that accordingly.
 #'
 #' @returns A list featuring the forecasted values, a forecast plot and forecasted values.
+#'
+#' @note It is highly recommended to use the \code{\link{predict.bettr_data}} function over the \code{\link{arima_model}}
+#' and \code{\link{ets_model}} functions as it has checks for time gaps and NA values. Also note that the \code{predict.bettr_data}
+#' function takes in the name of the odds column while \code{arima_model}, \code{ets_model} and \code{\link{skellam_model}} take in the values associated
+#' with this column.
+#'
+#' @seealso \code{\link{ets_model}}, \code{\link{skellam_model}}
 #'
 #' @export
 #' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
@@ -112,6 +127,13 @@ predict.bettr_data <- function(object, odds, h = 36, model = c("all", "skellam",
 #' @importFrom lubridate "hours"
 #' @importFrom fable "ARIMA"
 #' @importFrom ggplot2 "ggplot" "geom_line" "geom_ribbon" "labs" "aes" "theme_bw"
+#'
+#' @usage arima_model(object,
+#'            odds_vec,
+#'            h = 36,
+#'            has_na = FALSE
+#' )
+#'
 #'
 #' @examples
 #' match <- subset(football, football$home_team == "Brentford")
@@ -144,7 +166,7 @@ arima_model <- function(object, odds_vec, h = 36, has_na = FALSE){
 }
 
 
-#' ETS-based betting odds forecasting
+#' ETS based betting odds forecasting
 #'
 #' Creates an ETS model given an object of class "\code{bettr_data}" and a vector of associated odds.
 #' Gives the model specification, the predicted values and a plot of the predicted and forecasted
@@ -152,12 +174,19 @@ arima_model <- function(object, odds_vec, h = 36, has_na = FALSE){
 #'
 #' @param object An object of class \code{bettr_data}.
 #' @param odds_vec A numeric vector of odds.
-#' @param h The number of hours to be forecast. 36 hours by default.
-#' @param has_na True if there are NA values present in \code{object} and/or \code{odds_vec}. Note
+#' @param h The number of hours to be forecast.
+#' @param has_na Should be true if there are NA values present in \code{object} and/or \code{odds_vec}. Note
 #' that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist in the two and deals
-#' with that accordingly. False by default.
+#' with that accordingly.
 #'
 #' @returns A list featuring the forecasted values, a forecast plot and forecasted values.
+#'
+#' @note It is highly recommended to use the \code{\link{predict.bettr_data}} function over the \code{\link{arima_model}}
+#' and \code{\link{ets_model}} functions as it has checks for time gaps and NA values. Also note that the \code{predict.bettr_data}
+#' function takes in the name of the odds column while \code{arima_model}, \code{ets_model} and \code{\link{skellam_model}} take in the values associated
+#' with this column.
+#'
+#' @seealso \code{\link{arima_model}}, \code{\link{skellam_model}}
 #'
 #' @export
 #' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
@@ -166,6 +195,13 @@ arima_model <- function(object, odds_vec, h = 36, has_na = FALSE){
 #' @importFrom lubridate "hours"
 #' @importFrom fable "ETS"
 #' @importFrom ggplot2 "ggplot" "geom_line" "geom_ribbon" "labs" "aes" "theme_bw"
+#'
+#'
+#' @usage ets_model(object,
+#'          odds_vec,
+#'          h = 36,
+#'          has_na = FALSE
+#' )
 #'
 #' @examples
 #' match <- subset(football, football$home_team == "Crystal Palace")
@@ -203,23 +239,46 @@ ets_model <- function(object, odds_vec, h = 36, has_na = FALSE) {
 #'
 #' @param object An object of class \code{bettr_data} on which \code{skellam_model} is performed on.
 #' @param odds_vec A numeric vector of odds.
-#' @param h The number of hours to be forecast. 36 hours by default.
-#' @param tickSize The minimum possible change in odds. 0.01 by default.
-#' @param sims The number of simulations. 2000 by default.
+#' @param h The number of hours to be forecast.
+#' @param tickSize The minimum possible change in odds.
+#' @param sims The number of simulations.
 #'
 #' @returns A list featuring the forecasted values, a forecast plot and forecasted values.
+#'
+#' @details Even though the skellam distribution models count data, this function
+#' only requires the odds and converts the upward/downward movement of the odds into counts,
+#' resulting in: \deqn{Sk(\lambda_1, \lambda_2)} Where \eqn{\lambda_1} and \eqn{\lambda_2} are the average
+#' upward/downward ticks per hour respectively.
+#'
+#' More information on the skellam distribution \href{https://en.wikipedia.org/wiki/Skellam_distribution}{here}.
+#'
+#'
+#' @seealso \code{\link{arima_model}}, \code{\link{ets_model}}
 #'
 #' @export
 #' @author Ivan Cakic - <\email{ivan.cakic.2023@@mumail.ie}>
 #'
-#' @importFrom skellam "rskellam"
 #' @importFrom ggplot2 "ggplot" "geom_line" "geom_ribbon" "labs" "aes" "theme_bw"
+#'
+#' @usage skellam_model(object,
+#'              odds_vec,
+#'              h = 36,
+#'              tickSize = 0.01,
+#'              sims = 2000
+#' )
 #'
 #' @examples
 #' match <- subset(football, football$home_team == "Aston Villa")
 #' match <- tsibble::fill_gaps(make_bettr(match))
 #' ets_model(match, match$draw_odds, h = 18)
-skellam_model <- function(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000) {
+skellam_model <- function(
+    object,
+    odds_vec,
+    h = 36,
+    tickSize = 0.01,
+    sims = 2000
+) {
+
   if(any(is.na(object)) || any(is.na(odds_vec))){
     object <- stats::na.omit(object)
     odds_vec <- stats::na.omit(odds_vec)
@@ -236,7 +295,7 @@ skellam_model <- function(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000
   lambda_neg_hat <- neg_count / (sum(time_intervals, na.rm = TRUE) / 3600)
 
   sims_net <- matrix(
-    skellam::rskellam(sims * h, lambda1 = lambda_pos_hat, lambda2 = lambda_neg_hat),
+    stats::rpois(sims*h, lambda = lambda_pos_hat) - stats::rpois(sims*h, lambda = lambda_neg_hat),
     nrow = sims, ncol = h, byrow = TRUE
   )
   sims_cum_ticks <- t(apply(sims_net, 1, cumsum))

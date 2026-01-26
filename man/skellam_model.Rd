@@ -4,18 +4,23 @@
 \alias{skellam_model}
 \title{Skellam based betting odds forecasting}
 \usage{
-skellam_model(object, odds_vec, h = 36, tickSize = 0.01, sims = 2000)
+skellam_model(object,
+             odds_vec,
+             h = 36,
+             tickSize = 0.01,
+             sims = 2000
+)
 }
 \arguments{
 \item{object}{An object of class \code{bettr_data} on which \code{skellam_model} is performed on.}
 
 \item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast. 36 hours by default.}
+\item{h}{The number of hours to be forecast.}
 
-\item{tickSize}{The minimum possible change in odds. 0.01 by default.}
+\item{tickSize}{The minimum possible change in odds.}
 
-\item{sims}{The number of simulations. 2000 by default.}
+\item{sims}{The number of simulations.}
 }
 \value{
 A list featuring the forecasted values, a forecast plot and forecasted values.
@@ -25,10 +30,21 @@ Creates a Skellam model given an object of class "\code{bettr_data}" and a vecto
 Gives the model specification, the predicted values and a plot of the predicted and forecasted
 odds over time, similarly to \code{\link{arima_model}} and \code{\link{ets_model}}
 }
+\details{
+Even though the skellam distribution models count data, this function
+only requires the odds and converts the upward/downward movement of the odds into counts,
+resulting in: \deqn{Sk(\lambda_1, \lambda_2)} Where \eqn{\lambda_1} and \eqn{\lambda_2} are the average
+upward/downward ticks per hour respectively.
+
+More information on the skellam distribution \href{https://en.wikipedia.org/wiki/Skellam_distribution}{here}.
+}
 \examples{
 match <- subset(football, football$home_team == "Aston Villa")
 match <- tsibble::fill_gaps(make_bettr(match))
 ets_model(match, match$draw_odds, h = 18)
+}
+\seealso{
+\code{\link{arima_model}}, \code{\link{ets_model}}
 }
 \author{
 Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>

@@ -4,13 +4,12 @@
 \alias{predict.bettr_data}
 \title{Apply a list of models to a dataset featuring betting odds}
 \usage{
-\method{predict}{bettr_data}(
-  object,
-  odds,
-  h = 36,
-  model = c("all", "skellam", "arima", "ets"),
-  has_na = NULL,
-  ...
+predict(object,
+       odds,
+       h = 36,
+       model = c("all", "arima", "ets", "skellam"),
+       has_na = NULL,
+       ...
 )
 }
 \arguments{
@@ -18,9 +17,9 @@
 
 \item{odds}{A character string which is the name of the column the user wishes to investigate.}
 
-\item{h}{The number of hours to be forecast. 36 hours by default.}
+\item{h}{The number of hours to be forecast.}
 
-\item{model}{Models to be applied to the data. Defaults to "all".}
+\item{model}{Models to be applied to the data.}
 
 \item{has_na}{Should be true if there are NA values present in \code{object} and/or
 if \code{object} has gaps in time data. If not specified, the function checks for gaps and

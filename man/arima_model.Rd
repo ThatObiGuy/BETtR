@@ -2,20 +2,24 @@
 % Please edit documentation in R/predict.bettr_data.R
 \name{arima_model}
 \alias{arima_model}
-\title{Arima-based betting odds forecasting}
+\title{Arima based betting odds forecasting}
 \usage{
-arima_model(object, odds_vec, h = 36, has_na = FALSE)
+arima_model(object,
+           odds_vec,
+           h = 36,
+           has_na = FALSE
+)
 }
 \arguments{
 \item{object}{An object of class \code{bettr_data}.}
 
 \item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast. 36 hours by default..}
+\item{h}{The number of hours to be forecast.}
 
 \item{has_na}{Should be true if there are NA values present in \code{object} and/or \code{odds_vec}. Note
 that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist and deals
-with that accordingly. False by default.}
+with that accordingly.}
 }
 \value{
 A list featuring the forecasted values, a forecast plot and forecasted values.
@@ -25,10 +29,19 @@ Creates an Arima model given an object of class "\code{bettr_data}" and a vector
 Gives the model specification, the predicted values and a plot of the predicted and forecasted
 odds over time, similarly to \code{\link{ets_model}} and \code{\link{skellam_model}}
 }
+\note{
+It is highly recommended to use the \code{\link{predict.bettr_data}} function over the \code{\link{arima_model}}
+and \code{\link{ets_model}} functions as it has checks for time gaps and NA values. Also note that the \code{predict.bettr_data}
+function takes in the name of the odds column while \code{arima_model}, \code{ets_model} and \code{\link{skellam_model}} take in the values associated
+with this column.
+}
 \examples{
 match <- subset(football, football$home_team == "Brentford")
 match <- tsibble::fill_gaps(make_bettr(match))
 arima_model(match, match$away_odds, h = 48, has_na = TRUE)
+}
+\seealso{
+\code{\link{ets_model}}, \code{\link{skellam_model}}
 }
 \author{
 Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>

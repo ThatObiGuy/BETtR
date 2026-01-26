@@ -30,7 +30,6 @@ Imports:
     ggiraph,
     ggplot2,
     lubridate,
-    skellam,
     tsibble
 Suggests: 
     htmltools,
