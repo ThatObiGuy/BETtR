@@ -46,7 +46,7 @@ test_that("custom column names work", {
   home_odds = c(2.55, 1.55, 3.11), away_odds = c(2.11, 3.22, 1.33),
   drawOdds = c(3.36, 3.00, 3.0))
   x1 <- make_bettr(generatedExample, draw_odds = "drawOdds",
-    away_odds = "away_odds", logged_time = "log_time", event_id = "idOfEvent")
+    away_odds = "away_odds", logged_time = "log_time", event_id = "idOfEvent", make_tsibble = FALSE)
   expect_s3_class(x1, "bettr_data")
 })
 

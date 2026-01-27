@@ -51,7 +51,6 @@
 #' @author Sorin Bivol - <\email{SORIN.BIVOL.2023@@mumail.ie}>
 #' @importFrom dplyr "arrange" "all_of" "across"
 #' @importFrom tsibble "as_tsibble"
-#' @importFrom stats  "complete.cases"
 
 #' @examples
 #'
@@ -110,7 +109,7 @@ make_bettr <- function(data,
   }
   # Checks for missing rows:
   # use complete.cases: want rows
-  ok <- stats::complete.cases(data[, req])
+  ok <- stats::complete.cases(data[, req, drop = FALSE])
   if(any(!ok)) {
    if(sum(!ok) == 1) {
     # rows is plural cant have that for 1 row
@@ -127,7 +126,7 @@ make_bettr <- function(data,
 
   if(drop_NA_values)
   {
-    data <- data[ok, ]
+    data <- data[ok,, drop = FALSE]
   }
 
   if(!inherits(data[[logged_time]], "POSIXct"))
