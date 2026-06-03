@@ -15,7 +15,7 @@ arima_model(object,
 
 \item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast.}
+\item{h}{The number of minutes to be forecast.}
 
 \item{has_na}{Should be true if there are NA values present in \code{object} and/or \code{odds_vec}. Note
 that \code{predict.bettr_data} automatically checks whether NA values and/or gaps exist and deals
@@ -41,7 +41,7 @@ match <- tsibble::fill_gaps(make_bettr(match))
 arima_model(match, match$away_odds, h = 48, has_na = TRUE)
 }
 \seealso{
-\code{\link{ets_model}}, \code{\link{skellam_model}}
+\code{\link{ets_model}}, \code{\link{skellam_model}}, \code{\link{rw_model}}
 }
 \author{
 Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>

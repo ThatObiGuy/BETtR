@@ -16,7 +16,7 @@ skellam_model(object,
 
 \item{odds_vec}{A numeric vector of odds.}
 
-\item{h}{The number of hours to be forecast.}
+\item{h}{The number of minutes to be forecast.}
 
 \item{tickSize}{The minimum possible change in odds.}
 
@@ -41,10 +41,10 @@ More information on the skellam distribution \href{https://en.wikipedia.org/wiki
 \examples{
 match <- subset(football, football$home_team == "Aston Villa")
 match <- tsibble::fill_gaps(make_bettr(match))
-ets_model(match, match$draw_odds, h = 18)
+skellam_model(match, match$draw_odds, h = 18)
 }
 \seealso{
-\code{\link{arima_model}}, \code{\link{ets_model}}
+\code{\link{arima_model}}, \code{\link{ets_model}}, \code{\link{rw_model}}
 }
 \author{
 Ivan Cakic - <\email{ivan.cakic.2023@mumail.ie}>

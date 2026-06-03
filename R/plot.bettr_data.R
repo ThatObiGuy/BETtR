@@ -20,8 +20,7 @@
 #' @export
 #' @author Owen F. O'Connor - <\email{owen.oconnor.2024@@mumail.ie}>
 #'
-#' @importFrom dplyr "as_tibble" "slice_min" "slice_max" "case_when" "left_join"
-#' @importFrom genzplyr "squad_up" "glow_up" "vibe_check"
+#' @importFrom dplyr "as_tibble" "select" "mutate" "group_by" "slice_min" "slice_max" "case_when" "left_join"
 #' @importFrom ggplot2 "ggplot" "geom_line" "scale_color_discrete"
 #' @importFrom ggiraph "geom_line_interactive" "girafe"
 #'
@@ -33,7 +32,7 @@
 #' plot(football, odd = "CF", width_svg = 8)
 #'
 #' football2 <- football |>
-#'   genzplyr::glow_up(fixture = paste(home_team, "vs", away_team))
+#'   dplyr::mutate(fixture = paste(home_team, "vs", away_team))
 #'
 #' plot(football2, fixture = "fixture")
 plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
@@ -53,41 +52,41 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
 
   # We require an object containing opening odds
   x |>
-    genzplyr::squad_up(event_id) |>
+    dplyr::group_by(event_id) |>
     dplyr::slice_min(logged_time, n = 1) |>
-    genzplyr::vibe_check(event_id, home_odds, draw_odds, away_odds) -> opening_odds
+    dplyr::select(event_id, home_odds, draw_odds, away_odds) -> opening_odds
 
   # We must identify the opening or closing favourites based on user's argument
   if (odd == "OF") {
     opening_odds |>
-      genzplyr::glow_up(fav_choice = c("home_odds", "draw_odds", "away_odds")[which.max(c(home_odds, draw_odds, away_odds))],
+      dplyr::mutate(fav_choice = c("home_odds", "draw_odds", "away_odds")[which.max(c(home_odds, draw_odds, away_odds))],
                         opening_fav_odds = dplyr::case_when(
                           fav_choice == "home_odds" ~ home_odds,
                           fav_choice == "draw_odds" ~ draw_odds,
                           fav_choice == "away_odds" ~ away_odds)) |>
-      genzplyr::vibe_check(event_id, fav_choice, opening_fav_odds) -> x_target_odd
+      dplyr::select(event_id, fav_choice, opening_fav_odds) -> x_target_odd
 
   } else if (odd == "CF") {
     x |>
-      genzplyr::squad_up(event_id) |>
+      dplyr::group_by(event_id) |>
       dplyr::slice_max(logged_time, n = 1) |>
-      genzplyr::glow_up(fav_choice = c("home_odds", "draw_odds", "away_odds")[which.max(c(home_odds, draw_odds, away_odds))]) |>
-      genzplyr::vibe_check(event_id, fav_choice) -> x_target_odd
+      dplyr::mutate(fav_choice = c("home_odds", "draw_odds", "away_odds")[which.max(c(home_odds, draw_odds, away_odds))]) |>
+      dplyr::select(event_id, fav_choice) -> x_target_odd
 
     x_target_odd |>
       dplyr::left_join(opening_odds, by = "event_id") |>
-      genzplyr::glow_up(opening_fav_odds = dplyr::case_when(
+      dplyr::mutate(opening_fav_odds = dplyr::case_when(
         fav_choice == "home_odds" ~ home_odds,
         fav_choice == "draw_odds" ~ draw_odds,
         fav_choice == "away_odds" ~ away_odds
       )) |>
-      genzplyr::vibe_check(event_id, fav_choice, opening_fav_odds) -> x_target_odd
+      dplyr::select(event_id, fav_choice, opening_fav_odds) -> x_target_odd
   }
 
   # Appending original data with this info and transforming data
   x |>
     dplyr::left_join(x_target_odd, by = "event_id") |>
-    genzplyr::glow_up(
+    dplyr::mutate(
       fav_odds = dplyr::case_when(
         fav_choice == "home_odds" ~ home_odds,
         fav_choice == "draw_odds" ~ draw_odds,
@@ -99,20 +98,20 @@ plot.bettr_data <- function(x, odd = c("CF", "OF"), fixture = NULL, ...) {
   # Create legend_label and tooltip columns
   if (is.null(fixture)) {
     x_base |>
-      genzplyr::glow_up(
+      dplyr::mutate(
         legend_label = event_id,
         tooltip = paste0("event_id: ", event_id)
       ) -> x_plottable
   } else {
     x_base |>
-      genzplyr::glow_up(
+      dplyr::mutate(
         legend_label = fixture,
         tooltip = fixture
       ) -> x_plottable
   }
 
   x_plottable <- x_plottable |>
-    genzplyr::vibe_check(event_id, legend_label, logged_time, pct_change_fav_odds, tooltip)
+    dplyr::select(event_id, legend_label, logged_time, pct_change_fav_odds, tooltip)
 
   # Core ggplot object (shared by both interactive and static)
   p_base <- ggplot2::ggplot(

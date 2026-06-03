@@ -35,7 +35,7 @@ plot(football)
 plot(football, odd = "CF", width_svg = 8)
 
 football2 <- football |>
-  genzplyr::glow_up(fixture = paste(home_team, "vs", away_team))
+  dplyr::mutate(fixture = paste(home_team, "vs", away_team))
 
 plot(football2, fixture = "fixture")
 }

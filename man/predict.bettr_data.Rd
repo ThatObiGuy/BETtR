@@ -4,7 +4,7 @@
 \alias{predict.bettr_data}
 \title{Apply a list of models to a dataset featuring betting odds}
 \usage{
-predict(object,
+predict.bettr_data(object,
        odds,
        h = 36,
        model = c("all", "arima", "ets", "skellam"),
@@ -17,7 +17,7 @@ predict(object,
 
 \item{odds}{A character string which is the name of the column the user wishes to investigate.}
 
-\item{h}{The number of hours to be forecast.}
+\item{h}{The number of minutes to be forecast.}
 
 \item{model}{Models to be applied to the data.}
 
@@ -31,8 +31,9 @@ NAs and passes the result of the checks to the named functions.}
 A list featuring the models fitted, their forecast plot and forecasted values.
 }
 \description{
-A wrapper function for \code{\link{arima_model}}, \code{\link{ets_model}} and \code{\link{skellam_model}}
-with some built-in checks for univariate time series and NA value handling necessary for arima and ets.
+A wrapper function for \code{\link{arima_model}}, \code{\link{ets_model}}, \code{\link{skellam_model}}
+and \code{\link{rw_model}}
+with some built-in checks for univariate time series and NA value handling necessary for arima, ets and random walk.
 }
 \examples{
 data <- subset(football, home_team == "Sunderland")
