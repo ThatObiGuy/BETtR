@@ -30,7 +30,8 @@ Imports:
     ggiraph,
     ggplot2,
     lubridate,
-    tsibble
+    tsibble,
+    zoo
 Suggests: 
     htmltools,
     knitr,
